@@ -241,10 +241,10 @@
     <div class="section-block">
       <h2>Territorial Gains</h2>
       <ul data-section="territorial">
-        <li data-id="1" draggable="true">Returning all territories to Ukraine (1991 borders)</li>
-        <li data-id="2" draggable="true">Maintaining Russian control as of 2025</li>
-        <li data-id="3" draggable="true">Maintaining Russian control pre-2022 (Crimea, etc.)</li>
-        <li data-id="4" draggable="true">International recognition of occupied territories</li>
+        <li data-id="1" draggable="true">1-Returning all territories to Ukraine (1991 borders)</li>
+        <li data-id="2" draggable="true">2-Maintaining Russian control as of 2025</li>
+        <li data-id="3" draggable="true">3-Maintaining Russian control pre-2022 (Crimea, etc.)</li>
+        <li data-id="4" draggable="true">4-International recognition of occupied territories</li>
       </ul>
     </div>
 
@@ -252,9 +252,9 @@
     <div class="section-block">
       <h2>Security Arrangements</h2>
       <ul data-section="security">
-        <li data-id="5" draggable="true">Ukraine renouncing ambitions to join NATO</li>
-        <li data-id="6" draggable="true">Granting Ukraine NATO membership</li>
-        <li data-id="7" draggable="true">Legally binding bilateral defense agreements</li>
+        <li data-id="5" draggable="true">5-Ukraine renouncing ambitions to join NATO</li>
+        <li data-id="6" draggable="true">6-Granting Ukraine NATO membership</li>
+        <li data-id="7" draggable="true">7-Legally binding bilateral defense agreements</li>
       </ul>
     </div>
 
@@ -262,10 +262,10 @@
     <div class="section-block">
       <h2>Ukraine's Military Capacity</h2>
       <ul data-section="military">
-        <li data-id="8" draggable="true">Imposing restrictions on Ukraine’s military...</li>
-        <li data-id="9" draggable="true">Developing Ukrainian military-industrial complex</li>
-        <li data-id="10" draggable="true">Keeping Ukrainian Army advanced & NATO-compatible</li>
-        <li data-id="11" draggable="true">Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability</li>
+        <li data-id="8" draggable="true">8-Imposing restrictions on Ukraine’s military...</li>
+        <li data-id="9" draggable="true">9-Developing Ukrainian military-industrial complex</li>
+        <li data-id="10" draggable="true">10-Keeping Ukrainian Army advanced & NATO-compatible</li>
+        <li data-id="11" draggable="true">11-Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability</li>
       </ul>
     </div>
 
@@ -273,10 +273,10 @@
     <div class="section-block">
       <h2>Sanctions on Russia</h2>
       <ul data-section="sanctions">
-        <li data-id="12" draggable="true">Removal/easing of Western sanctions</li>
-        <li data-id="13" draggable="true">Keeping Western sanctions tight</li>
-        <li data-id="14" draggable="true">Releasing Russian frozen assets</li>
-        <li data-id="15" draggable="true">Using Russian frozen assets to rebuild Ukraine</li>
+        <li data-id="12" draggable="true">12-Removal/easing of Western sanctions</li>
+        <li data-id="13" draggable="true">13-Keeping Western sanctions tight</li>
+        <li data-id="14" draggable="true">14-Releasing Russian frozen assets</li>
+        <li data-id="15" draggable="true">15-Using Russian frozen assets to rebuild Ukraine</li>
       </ul>
     </div>
 
@@ -284,8 +284,8 @@
     <div class="section-block">
       <h2>Control over Ukrainian Resources</h2>
       <ul data-section="resources">
-        <li data-id="16" draggable="true">Using Ukraine’s gas transit for EU supplies</li>
-        <li data-id="17" draggable="true">Allowing Western companies to use resources</li>
+        <li data-id="16" draggable="true">16-Using Ukraine’s gas transit for EU supplies</li>
+        <li data-id="17" draggable="true">17-Allowing Western companies to use resources</li>
       </ul>
     </div>
 
@@ -293,18 +293,21 @@
     <div class="section-block">
       <h2>Justice and Accountability</h2>
       <ul data-section="justice">
-        <li data-id="18" draggable="true">Demanding accountability for Russian war crimes</li>
-        <li data-id="19" draggable="true">Advocating safe return of deported Ukrainians</li>
-        <li data-id="20" draggable="true">Having elections in Ukraine before peace settlement</li>
+        <li data-id="18" draggable="true">18-Demanding accountability for Russian war crimes</li>
+        <li data-id="19" draggable="true">19-Advocating safe return of deported Ukrainians</li>
+        <li data-id="20" draggable="true">20-Having elections in Ukraine before peace settlement</li>
       </ul>
     </div>
   </div>
 
   <!-- CENTER COLUMN: Official Peace Treaty -->
   <div id="centerColumn"
-       ondragover="allowDrop(event)"
-       ondrop="handleDrop(event, 'center')">
-    <div class="official-doc">
+  ondragover="allowDrop(event)"
+  ondrop="handleDrop(event, 'center')">
+  <div class="official-doc">
+  <!-- Error Message Container -->
+  <div id="errorMessage" style="display:none; margin-bottom:1rem; padding:0.5rem; background-color:#ffdddd; border:1px solid #ff8888; text-align:center;"></div>
+ 
       <h2>Ukraine-Russia Peace Agreement Draft</h2>
 
       <!-- Standard Preamble -->
@@ -420,7 +423,17 @@
     }
     return '';
   }
-
+  function showErrorMessage(message) {
+  const errorDiv = document.getElementById("errorMessage");
+  if (errorDiv) {
+    errorDiv.innerText = message;
+    errorDiv.style.display = "block";
+    // Hide the message after 3 seconds (or adjust as needed)
+    setTimeout(() => {
+      errorDiv.style.display = "none";
+    }, 3000);
+  }
+}
   /***************************************************************************
    * 3. Radar Chart initialization (Chart.js)
    ***************************************************************************/
@@ -565,50 +578,119 @@
     }
   });
 
+
+
+
+  // Define conflict rules: each key has an array of incompatible article IDs.
+const conflictRules = {
+  1: [2, 3, 4],
+  2: [1, 3],
+  3: [1, 2],
+  4: [1],
+  5: [6],
+  6: [5],
+  7: [],
+  8: [10],
+  9: [],
+  10: [8],
+  11: [],
+  12: [13],
+  13: [12],
+  14: [15],
+  15: [14],
+  16: [],
+  17: [],
+  18: [],
+  19: [],
+  20: []
+};
+
+/**
+ * Check if the article (newArticleId) conflicts with any already added article.
+ * Returns an object with conflict: true/false and a message.
+ */
+function checkConflicts(newArticleId) {
+  // Get all article IDs already in the center.
+  const centerArticleIds = [];
+  document.querySelectorAll(".treaty-section ul li").forEach((li) => {
+    const id = li.getAttribute("data-id");
+    if (id) centerArticleIds.push(parseInt(id, 10));
+  });
+
+  // Get conflict list for the new article.
+  const newArticleConflicts = conflictRules[newArticleId] || [];
+  // Check if any article already added is in the new article's conflict list.
+  for (let existingId of centerArticleIds) {
+    if (newArticleConflicts.indexOf(existingId) !== -1) {
+      return {
+        conflict: true,
+        message: `Article ${newArticleId} conflicts with article ${existingId}. They cannot be in the draft together.`
+      };
+    }
+    // Also check reverse: if the existing article's conflict list includes the new one.
+    const existingArticleConflicts = conflictRules[existingId] || [];
+    if (existingArticleConflicts.indexOf(newArticleId) !== -1) {
+      return {
+        conflict: true,
+        message: `Article ${newArticleId} conflicts with article ${existingId}. They cannot be in the draft together.`
+      };
+    }
+  }
+  return { conflict: false };
+}
+
   /***************************************************************************
    * 6. Move article from left => center
    ***************************************************************************/
-  function moveArticleToCenter(articleId, section, clickedLi) {
-    const info = articlesInfo[articleId];
-    if (!info) return;
-
-    let sourceLi = clickedLi;
-    if (!sourceLi) {
-      sourceLi = document.querySelector(
-        `#leftColumn ul[data-section="${section}"] li[data-id="${articleId}"]`
-      );
-    }
-    if (!sourceLi) return;
-
-    const ukIcon = getColoredIcon(info.Ukraine_pos);
-    const ruIcon = getColoredIcon(info.Russia_pos);
-
-    const newLi = document.createElement("li");
-    newLi.setAttribute("data-id", articleId);
-    newLi.setAttribute("data-section", section);
-
-    const mainTextDiv = document.createElement("div");
-    mainTextDiv.textContent = sourceLi.textContent;
-
-    const iconDiv = document.createElement("div");
-    iconDiv.style.fontSize = "0.9rem";
-    iconDiv.style.marginTop = "4px";
-    iconDiv.style.color = "#666";
-    iconDiv.style.fontStyle = "italic";
-    iconDiv.innerHTML = `UKR: ${ukIcon} &nbsp;&nbsp; RUS: ${ruIcon}`;
-
-    newLi.appendChild(mainTextDiv);
-    newLi.appendChild(iconDiv);
-
-    const treatyUl = document.querySelector(`#treaty-${section} ul`);
-    if (!treatyUl) return;
-
-    treatyUl.appendChild(newLi);
-    sourceLi.remove();
-
-    makeLiDraggable(newLi);
-    recalcRadarChart();
+   function moveArticleToCenter(articleId, section, clickedLi) {
+  // Check for conflicts before proceeding.
+  const conflictCheck = checkConflicts(parseInt(articleId, 10));
+  if (conflictCheck.conflict) {
+    showErrorMessage(conflictCheck.message);
+    return; // Do not move the article.
   }
+
+  // (The rest of your code remains the same)
+  const info = articlesInfo[articleId];
+  if (!info) return;
+
+  let sourceLi = clickedLi;
+  if (!sourceLi) {
+    sourceLi = document.querySelector(
+      `#leftColumn ul[data-section="${section}"] li[data-id="${articleId}"]`
+    );
+  }
+  if (!sourceLi) return;
+
+  const ukIcon = getColoredIcon(info.Ukraine_pos);
+  const ruIcon = getColoredIcon(info.Russia_pos);
+
+  const newLi = document.createElement("li");
+  newLi.setAttribute("data-id", articleId);
+  newLi.setAttribute("data-section", section);
+
+  const mainTextDiv = document.createElement("div");
+  mainTextDiv.textContent = sourceLi.textContent;
+
+  const iconDiv = document.createElement("div");
+  iconDiv.style.fontSize = "0.9rem";
+  iconDiv.style.marginTop = "4px";
+  iconDiv.style.color = "#666";
+  iconDiv.style.fontStyle = "italic";
+  iconDiv.innerHTML = `UKR: ${ukIcon} &nbsp;&nbsp; RUS: ${ruIcon}`;
+
+  newLi.appendChild(mainTextDiv);
+  newLi.appendChild(iconDiv);
+
+  const treatyUl = document.querySelector(`#treaty-${section} ul`);
+  if (!treatyUl) return;
+
+  treatyUl.appendChild(newLi);
+  sourceLi.remove();
+
+  makeLiDraggable(newLi);
+  recalcRadarChart();
+}
 
   /***************************************************************************
    * 7. Move article from center => left
