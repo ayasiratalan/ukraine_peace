@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>White Background Treaty with Radar Chart, Icons & Return-to-Left</title>
+  <style>
+    /* ---------------------------
+       Basic page/body styling
+       --------------------------- */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Trebuchet MS", sans-serif;
+      background-color: #ffffff; /* A light gray to contrast with container */
+      color: #333333; /* standard dark text */
+    }
+
+    /* ---------------------------
+       Instructions frame styling
+       --------------------------- */
+    #instructions {
+      max-width: 1300px;
+      margin: 2rem auto;
+      padding: 1rem;
+      border: 2px solid #cccccc;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #instructions h2 {
+      margin-top: 0;
+    }
+
+    /* ---------------------------
+       Centered container
+       --------------------------- */
+    .container {
+      max-width: 1300px;
+      margin: 2rem auto;      /* This centers the container horizontally */
+      padding: 1rem;         /* Some spacing around */
+      background-color: #fff; /* White background for the content area */
+      box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Subtle shadow for style */
+      border-radius: 8px;    /* Slight rounding of corners */
+      display: flex;
+      flex-direction: row;
+    }
+
+    /* Left column, center column, right column layout */
+    #leftColumn {
+      flex: 1;
+      min-width: 260px;
+      background-color: #f5f5f5;
+      border-right: 2px solid #cccccc;
+      overflow-y: auto;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    #centerColumn {
+      flex: 2;
+      background-color: #ffffff;
+      overflow-y: auto;
+      padding: 1rem;
+      box-sizing: border-box;
+      display: flex;
+    }
+    #rightColumn {
+      flex: 1.2;
+      border-left: 2px solid #cccccc;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    /* Headings in columns */
+    #leftColumn h1 {
+      text-align: center;
+      background-color: #eaeaea;
+      color: #333;
+      padding: 0.5rem;
+      margin: 0 -1rem 1rem -1rem;
+      font-size: 1.3rem;
+    }
+    #rightColumn h2 {
+      margin-top: 0;
+      text-align: center;
+      background-color: #eaeaea;
+      color: #333333;
+      padding: 0.5rem;
+      margin: 0 -1rem 1rem -1rem;
+      font-size: 1.2rem;
+      width: calc(100% + 2rem);
+      box-sizing: border-box;
+    }
+
+    /* Section blocks in the left column */
+    .section-block {
+      margin-bottom: 1.5rem;
+    }
+    .section-block h2 {
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      background-color: #dddddd;
+      padding: 0.3rem 0.5rem;
+      border-left: 4px solid #666666;
+    }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      margin: 8px 0;
+      padding: 8px;
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      cursor: pointer;
+      /* Disable text selection for better drag handling */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    li:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* The official doc in the center */
+    .official-doc {
+      margin: 0 auto;
+      padding: 2rem;
+      border: 10px solid #ccc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: #fafafa;
+      width: 95%;
+      max-width: 900px;
+      color: #333333;
+      font-family: "Georgia", serif;
+      overflow-y: auto;
+    }
+    .official-doc h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: #333333;
+    }
+    .treaty-section {
+      margin-bottom: 1.5rem;
+    }
+    .treaty-section h3 {
+      margin: 1rem 0 0.5rem;
+      font-size: 1.1rem;
+      text-decoration: underline;
+    }
+    .treaty-section ul {
+      list-style-type: none;
+      margin-left: 0;
+      color: #444444;
+    }
+    .treaty-section ul li {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      padding: 5px;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .treaty-section ul li:hover {
+      background-color: #f5f5f5;
+    }
+
+    /* Radar container in the right column */
+    #radarContainer {
+      width: 100%;
+      max-width: 480px;
+      height: 400px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    
+    /* Legend styling for the radar chart */
+    #chartLegend {
+      text-align: left;
+      margin-top: 1rem;
+      width: 100%;
+    }
+    #chartLegend ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #chartLegend li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+
+
+<!-- Instructions Frame -->
+<div id="instructions">
+  <h2>Instructions</h2>
+  <p>
+    The radar chart serves as a visualization tool for assessing the viability of potential peace agreements between Ukraine and Russia. The chart can help negotiators identify which combinations of agreement items might achieve a workable balance that keeps all parties above their minimum requirements while maximizing areas of mutual satisfaction.
+  </p>
+  <p>
+    When analyzing the chart, examine the relationship between satisfaction levels and negotiability scores for each stakeholder. High negotiability paired with moderate satisfaction suggests areas where parties have flexibility to make concessions, while low negotiability combined with high satisfaction often indicates core non-negotiable positions. For instance, if Russia shows high satisfaction but low negotiability, this suggests a hard line position, whereas Ukraine might show moderate satisfaction and higher negotiability, indicating room for compromise.
+  </p>
+  <p>
+    The most promising paths to agreement appear where multiple parties show both above-threshold satisfaction and meaningful negotiability scores. Negotiators should focus on these overlapping zones of flexibility while ensuring no party's overall satisfaction drops below their minimum acceptable threshold, as this would likely cause them to abandon talks. By balancing these metrics, negotiators can identify which combinations of agreement items offer the best chance of achieving a stable agreement.
+  </p>
+</div>
+
+<div class="container">
+
+  <!-- LEFT COLUMN: Available Articles -->
+  <div id="leftColumn">
+    <h1>Available Articles</h1>
+
+    <!-- Territorial Gains -->
+    <div class="section-block">
+      <h2>Territorial Gains</h2>
+      <ul data-section="territorial">
+        <li data-id="1" draggable="true">Returning all territories to Ukraine (1991 borders)</li>
+        <li data-id="2" draggable="true">Maintaining Russian control as of 2025</li>
+        <li data-id="3" draggable="true">Maintaining Russian control pre-2022 (Crimea, etc.)</li>
+        <li data-id="4" draggable="true">International recognition of occupied territories</li>
+      </ul>
+    </div>
+
+    <!-- Security Arrangements -->
+    <div class="section-block">
+      <h2>Security Arrangements</h2>
+      <ul data-section="security">
+        <li data-id="5" draggable="true">Ukraine renouncing ambitions to join NATO</li>
+        <li data-id="6" draggable="true">Granting Ukraine NATO membership</li>
+        <li data-id="7" draggable="true">Legally binding bilateral defense agreements</li>
+      </ul>
+    </div>
+
+    <!-- Ukraine's Military Capacity -->
+    <div class="section-block">
+      <h2>Ukraine's Military Capacity</h2>
+      <ul data-section="military">
+        <li data-id="8" draggable="true">Imposing restrictions on Ukraine’s military...</li>
+        <li data-id="9" draggable="true">Developing Ukrainian military-industrial complex</li>
+        <li data-id="10" draggable="true">Keeping Ukrainian Army advanced & NATO-compatible</li>
+        <li data-id="11" draggable="true">Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability</li>
+      </ul>
+    </div>
+
+    <!-- Sanctions on Russia -->
+    <div class="section-block">
+      <h2>Sanctions on Russia</h2>
+      <ul data-section="sanctions">
+        <li data-id="12" draggable="true">Removal/easing of Western sanctions</li>
+        <li data-id="13" draggable="true">Keeping Western sanctions tight</li>
+        <li data-id="14" draggable="true">Releasing Russian frozen assets</li>
+        <li data-id="15" draggable="true">Using Russian frozen assets to rebuild Ukraine</li>
+      </ul>
+    </div>
+
+    <!-- Control over Ukrainian Resources -->
+    <div class="section-block">
+      <h2>Control over Ukrainian Resources</h2>
+      <ul data-section="resources">
+        <li data-id="16" draggable="true">Using Ukraine’s gas transit for EU supplies</li>
+        <li data-id="17" draggable="true">Allowing Western companies to use resources</li>
+      </ul>
+    </div>
+
+    <!-- Justice and Accountability -->
+    <div class="section-block">
+      <h2>Justice and Accountability</h2>
+      <ul data-section="justice">
+        <li data-id="18" draggable="true">Demanding accountability for Russian war crimes</li>
+        <li data-id="19" draggable="true">Advocating safe return of deported Ukrainians</li>
+        <li data-id="20" draggable="true">Having elections in Ukraine before peace settlement</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CENTER COLUMN: Official Peace Treaty -->
+  <div id="centerColumn"
+       ondragover="allowDrop(event)"
+       ondrop="handleDrop(event, 'center')">
+    <div class="official-doc">
+      <h2>Ukraine-Russia Peace Agreement Draft</h2>
+
+      <!-- Standard Preamble -->
+      <p>Package of measures for the implementation of the peace agreement is the following:</p>
+
+      <!-- Territorial Gains -->
+      <div class="treaty-section" id="treaty-territorial">
+        <h3>Territorial Gains</h3>
+        <ul></ul>
+      </div>
+
+      <!-- Security Arrangements -->
+      <div class="treaty-section" id="treaty-security">
+        <h3>Security Arrangements</h3>
+        <ul></ul>
+      </div>
+
+      <!-- Ukraine's Military Capacity -->
+      <div class="treaty-section" id="treaty-military">
+        <h3>Ukraine's Military Capacity</h3>
+        <ul></ul>
+      </div>
+
+      <!-- Sanctions on Russia -->
+      <div class="treaty-section" id="treaty-sanctions">
+        <h3>Sanctions on Russia</h3>
+        <ul></ul>
+      </div>
+
+      <!-- Control over Ukrainian Resources -->
+      <div class="treaty-section" id="treaty-resources">
+        <h3>Control over Ukrainian Resources</h3>
+        <ul></ul>
+      </div>
+
+      <!-- Justice and Accountability -->
+      <div class="treaty-section" id="treaty-justice">
+        <h3>Justice and Accountability</h3>
+        <ul></ul>
+      </div>
+
+      <!-- Concluding Remarks -->
+      <p><em>Signed by the participants of the contact group (Ukraine, Russia, USA, EU).</em></p>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN: Radar Chart -->
+  <div id="rightColumn"
+       ondragover="allowDrop(event)"
+       ondrop="handleDrop(event, 'right')">
+    <h2>Radar Chart</h2>
+    <div id="radarContainer">
+      <canvas id="radarChart"></canvas>
+      <!-- Chart Legend -->
+      <div id="chartLegend">
+        <p><strong>Legend:</strong></p>
+        <ul>
+          <li><span style="color:rgb(10, 163, 97)">Satisfaction</span>: Green area representing overall satisfaction.</li>
+          <li><span style="color:rgba(54,162,235,1)">Negotiability</span>: Blue area representing negotiability scores.</li>
+          <li><span style="color:black; border-bottom: 1px dashed black;">Minimum Acceptable Threshold</span>: Red dashed line indicating the minimum acceptable level.</li>
+        </ul>
+        <p>
+          The minimum acceptable threshold is calculated as a percentage of the maximum satisfaction rate (here assumed as 60% of a maximum of 10, resulting in a threshold of 6). Adjust these values as needed.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .container -->
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  /***************************************************************************
+   * 1. Data for each article:
+   *    - <actor>_sat, <actor>_neg
+   *    - Ukraine_pos, Russia_pos (used for icons)
+   ***************************************************************************/
+  const articlesInfo = {
+    1:  {Ukraine_sat:10,Ukraine_neg:10,Russia_sat:0, Russia_neg:0,  USA_sat:10,USA_neg:10,EU_sat:10,EU_neg:10, Ukraine_pos:1, Russia_pos:0},
+    2:  {Ukraine_sat:1, Ukraine_neg:3, Russia_sat:8, Russia_neg:8,  USA_sat:4, USA_neg:9,  EU_sat:3, EU_neg:8,  Ukraine_pos:0, Russia_pos:1},
+    3:  {Ukraine_sat:8, Ukraine_neg:8, Russia_sat:2, Russia_neg:2,  USA_sat:5, USA_neg:8,  EU_sat:5, EU_neg:8,  Ukraine_pos:2, Russia_pos:1},
+    4:  {Ukraine_sat:0, Ukraine_neg:1, Russia_sat:10,Russia_neg:6,  USA_sat:1, USA_neg:2,  EU_sat:1, EU_neg:2,  Ukraine_pos:0, Russia_pos:1},
+    5:  {Ukraine_sat:2, Ukraine_neg:7, Russia_sat:10,Russia_neg:0,  USA_sat:7, USA_neg:9,  EU_sat:7, EU_neg:9,  Ukraine_pos:2, Russia_pos:1},
+    6:  {Ukraine_sat:10,Ukraine_neg:7, Russia_sat:0, Russia_neg:0,  USA_sat:4, USA_neg:10,EU_sat:6, EU_neg:9,  Ukraine_pos:1, Russia_pos:0},
+    7:  {Ukraine_sat:8, Ukraine_neg:4, Russia_sat:3, Russia_neg:4,  USA_sat:7, USA_neg:8,  EU_sat:8, EU_neg:8,  Ukraine_pos:1, Russia_pos:0},
+    8:  {Ukraine_sat:0, Ukraine_neg:0, Russia_sat:9, Russia_neg:5,  USA_sat:1, USA_neg:4,  EU_sat:0, EU_neg:3,  Ukraine_pos:0, Russia_pos:2},
+    9:  {Ukraine_sat:10,Ukraine_neg:4, Russia_sat:3, Russia_neg:4,  USA_sat:8, USA_neg:4,  EU_sat:10,EU_neg:4,  Ukraine_pos:1, Russia_pos:0},
+    10: {Ukraine_sat:10,Ukraine_neg:1, Russia_sat:1, Russia_neg:2,  USA_sat:9, USA_neg:2,  EU_sat:10,EU_neg:1,  Ukraine_pos:1, Russia_pos:0},
+    11: {Ukraine_sat:6, Ukraine_neg:5, Russia_sat:4, Russia_neg:8,  USA_sat:5, USA_neg:9,  EU_sat:8, EU_neg:9,  Ukraine_pos:1, Russia_pos:2},
+    12: {Ukraine_sat:2, Ukraine_neg:2, Russia_sat:8, Russia_neg:5,  USA_sat:4, USA_neg:9,  EU_sat:5, EU_neg:6,  Ukraine_pos:0, Russia_pos:1},
+    13: {Ukraine_sat:8, Ukraine_neg:3, Russia_sat:5, Russia_neg:6,  USA_sat:8, USA_neg:9,  EU_sat:8, EU_neg:2,  Ukraine_pos:1, Russia_pos:2},
+    14: {Ukraine_sat:0, Ukraine_neg:1, Russia_sat:10,Russia_neg:4,  USA_sat:3, USA_neg:9,  EU_sat:3, EU_neg:4,  Ukraine_pos:0, Russia_pos:1},
+    15: {Ukraine_sat:10,Ukraine_neg:4, Russia_sat:3, Russia_neg:0,  USA_sat:9, USA_neg:9,  EU_sat:9, EU_neg:6,  Ukraine_pos:1, Russia_pos:0},
+    16: {Ukraine_sat:4, Ukraine_neg:7, Russia_sat:7,  Russia_neg:5,  USA_sat:4, USA_neg:9,  EU_sat:9, EU_neg:8,  Ukraine_pos:2, Russia_pos:2},
+    17: {Ukraine_sat:5, Ukraine_neg:9, Russia_sat:4,  Russia_neg:6,  USA_sat:6, USA_neg:7,  EU_sat:6, EU_neg:8,  Ukraine_pos:1, Russia_pos:0},
+    18: {Ukraine_sat:9, Ukraine_neg:7, Russia_sat:2,  Russia_neg:7,  USA_sat:7, USA_neg:9,  EU_sat:7, EU_neg:9,  Ukraine_pos:1, Russia_pos:2},
+    19: {Ukraine_sat:8, Ukraine_neg:9, Russia_sat:3,  Russia_neg:8,  USA_sat:5, USA_neg:9,  EU_sat:5, EU_neg:9,  Ukraine_pos:2, Russia_pos:2},
+    20: {Ukraine_sat:2, Ukraine_neg:6, Russia_sat:9,  Russia_neg:4,  USA_sat:10,USA_neg:6,  EU_sat:5,  EU_neg:9,  Ukraine_pos:0, Russia_pos:1}
+  };
+
+  /***************************************************************************
+   * 2. Icons for Ukraine/Russia positions: 1 => ✔, 0 => ✖, 2 => ✍ (or anything)
+   ***************************************************************************/
+  function getColoredIcon(pos) {
+    if (pos === 1) {
+      return '<span style="color: #66cc66;">\u2713</span>'; // ✔
+    } else if (pos === 2) {
+      return '<span style="color: #cccc00;">?</span>';      // ?
+    } else if (pos === 0) {
+      return '<span style="color: #ff6666;">\u00d7</span>'; // ✖
+    }
+    return '';
+  }
+
+  /***************************************************************************
+   * 3. Radar Chart initialization (Chart.js)
+   ***************************************************************************/
+  // Define threshold parameters:
+  const thresholdPercentage = 0.6; // 60%
+  const maxSatisfaction = 10;      // Maximum satisfaction per article (assumed)
+  const thresholdValue = thresholdPercentage * maxSatisfaction; // e.g., 6
+
+  const radarData = {
+    labels: ["Ukraine", "Russia", "USA", "EU"],
+    datasets: [
+      {
+        label: "Satisfaction",
+        data: [0, 0, 0, 0],
+        backgroundColor: "rgba(10, 163, 97,0.2)", // greenish tint can be adjusted
+        borderColor: "rgba(10, 163, 97,1)",
+        pointBackgroundColor: "rgba(10, 163, 97,1)",
+        fill: true
+      },
+      {
+        label: "Negotiability",
+        data: [0, 0, 0, 0],
+        backgroundColor: "rgba(54,162,235,0.2)",
+        borderColor: "rgba(54,162,235,1)",
+        pointBackgroundColor: "rgba(54,162,235,1)",
+        fill: true
+      },
+      {
+        label: "Minimum Acceptable Threshold",
+        data: [thresholdValue, thresholdValue, thresholdValue, thresholdValue],
+        borderColor: "black",
+        pointBackgroundColor: "black",
+        backgroundColor: "rgba(255,0,0,0)", // no fill
+        fill: false,
+        borderDash: [5, 5],
+        borderWidth: 0.7,
+        pointRadius: 0.5 // smaller points
+        // thinner line
+      }
+    ]
+  };
+  const radarChart = new Chart(document.getElementById('radarChart').getContext('2d'), {
+    type: 'radar',
+    data: radarData,
+    options: {
+      scales: {
+        r: {
+          suggestedMin: 0,
+          suggestedMax: 10
+        }
+      }
+    }
+  });
+
+  /***************************************************************************
+   * 4. Drag & Drop handling
+   ***************************************************************************/
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function handleDragStart(event) {
+    const li = event.target;
+    const articleId = li.getAttribute("data-id");
+    let origin, section;
+    
+    if (li.closest("#centerColumn")) {
+      origin = "center";
+      section = li.getAttribute("data-section"); 
+    } else {
+      origin = "left";
+      const parentUl = li.closest("ul[data-section]");
+      if (parentUl) {
+        section = parentUl.getAttribute("data-section");
+      }
+    }
+    
+    const dragData = JSON.stringify({ articleId, origin, section });
+    event.dataTransfer.setData("text/plain", dragData);
+  }
+
+  function handleDrop(event, dropZone) {
+    event.preventDefault();
+    const data = event.dataTransfer.getData("text/plain");
+    if (!data) return;
+    const { articleId, origin, section } = JSON.parse(data);
+
+    if (dropZone === 'center') {
+      if (origin === 'left') {
+        moveArticleToCenter(articleId, section);
+      }
+    } else if (dropZone === 'left') {
+      if (origin === 'center') {
+        moveArticleToLeft(articleId, section);
+      }
+    } else if (dropZone === 'right') {
+      console.log("Dropped on the right column; no action set by default.");
+    } else {
+      console.log("Dropped on unknown zone:", dropZone);
+    }
+  }
+
+  // Mark left column as drop zone
+  const leftColumn = document.getElementById("leftColumn");
+  leftColumn.ondragover = allowDrop;
+  leftColumn.ondrop = (event) => {
+    handleDrop(event, 'left');
+  };
+
+  // Attach dragstart to all existing LIs in left column
+  document.querySelectorAll("#leftColumn li").forEach((li) => {
+    li.addEventListener("dragstart", handleDragStart);
+  });
+
+  // Make newly created LIs draggable
+  function makeLiDraggable(li) {
+    li.setAttribute("draggable", "true");
+    li.addEventListener("dragstart", handleDragStart);
+  }
+
+  /***************************************************************************
+   * 5. Click-based move logic
+   ***************************************************************************/
+  leftColumn.addEventListener("click", (event) => {
+    const li = event.target;
+    if (li && li.tagName === "LI") {
+      const articleId = li.getAttribute("data-id");
+      const parentUl = li.closest("ul");
+      const section = parentUl.getAttribute("data-section");
+      moveArticleToCenter(articleId, section, li);
+    }
+  });
+
+  const centerColumn = document.getElementById("centerColumn");
+  centerColumn.addEventListener("click", (event) => {
+    const li = event.target;
+    if (li && li.tagName === "LI") {
+      const articleId = li.getAttribute("data-id");
+      const parentSectionId = li.closest(".treaty-section").id;
+      const section = parentSectionId.replace("treaty-", "");
+      moveArticleToLeft(articleId, section, li);
+    }
+  });
+
+  /***************************************************************************
+   * 6. Move article from left => center
+   ***************************************************************************/
+  function moveArticleToCenter(articleId, section, clickedLi) {
+    const info = articlesInfo[articleId];
+    if (!info) return;
+
+    let sourceLi = clickedLi;
+    if (!sourceLi) {
+      sourceLi = document.querySelector(
+        `#leftColumn ul[data-section="${section}"] li[data-id="${articleId}"]`
+      );
+    }
+    if (!sourceLi) return;
+
+    const ukIcon = getColoredIcon(info.Ukraine_pos);
+    const ruIcon = getColoredIcon(info.Russia_pos);
+
+    const newLi = document.createElement("li");
+    newLi.setAttribute("data-id", articleId);
+    newLi.setAttribute("data-section", section);
+
+    const mainTextDiv = document.createElement("div");
+    mainTextDiv.textContent = sourceLi.textContent;
+
+    const iconDiv = document.createElement("div");
+    iconDiv.style.fontSize = "0.9rem";
+    iconDiv.style.marginTop = "4px";
+    iconDiv.style.color = "#666";
+    iconDiv.style.fontStyle = "italic";
+    iconDiv.innerHTML = `UKR: ${ukIcon} &nbsp;&nbsp; RUS: ${ruIcon}`;
+
+    newLi.appendChild(mainTextDiv);
+    newLi.appendChild(iconDiv);
+
+    const treatyUl = document.querySelector(`#treaty-${section} ul`);
+    if (!treatyUl) return;
+
+    treatyUl.appendChild(newLi);
+    sourceLi.remove();
+
+    makeLiDraggable(newLi);
+    recalcRadarChart();
+  }
+
+  /***************************************************************************
+   * 7. Move article from center => left
+   ***************************************************************************/
+  function moveArticleToLeft(articleId, section, clickedLi) {
+    const originalTitle = getOriginalTitle(articleId);
+    if (!originalTitle) return;
+
+    let sourceLi = clickedLi;
+    if (!sourceLi) {
+      sourceLi = document.querySelector(
+        `#treaty-${section} ul li[data-id="${articleId}"]`
+      );
+    }
+    if (!sourceLi) return;
+
+    const leftUl = document.querySelector(
+      `.section-block ul[data-section="${section}"]`
+    );
+    if (!leftUl) return;
+
+    const newLi = document.createElement("li");
+    newLi.setAttribute("data-id", articleId);
+    newLi.textContent = originalTitle;
+    newLi.setAttribute("draggable", "true");
+    newLi.addEventListener("dragstart", handleDragStart);
+
+    leftUl.appendChild(newLi);
+    sourceLi.remove();
+
+    makeLiDraggable(newLi);
+    recalcRadarChart();
+  }
+
+  function getOriginalTitle(articleId) {
+    const idNum = parseInt(articleId, 10);
+    switch(idNum) {
+      case 1:  return "Returning all territories to Ukraine (1991 borders)";
+      case 2:  return "Maintaining Russian control as of 2025";
+      case 3:  return "Maintaining Russian control pre-2022 (Crimea, etc.)";
+      case 4:  return "International recognition of occupied territories";
+      case 5:  return "Ukraine renouncing ambitions to join NATO";
+      case 6:  return "Granting Ukraine NATO membership";
+      case 7:  return "Legally binding bilateral defense agreements";
+      case 8:  return "Imposing restrictions on Ukraine’s military...";
+      case 9:  return "Developing Ukrainian military-industrial complex";
+      case 10: return "Keeping Ukrainian Army advanced & NATO-compatible";
+      case 11: return "Considering peacekeeping forces, demilitarized zones";
+      case 12: return "Removal/easing of Western sanctions";
+      case 13: return "Keeping Western sanctions tight";
+      case 14: return "Releasing Russian frozen assets";
+      case 15: return "Using Russian frozen assets to rebuild Ukraine";
+      case 16: return "Using Ukraine’s gas transit for EU supplies";
+      case 17: return "Allowing Western companies to use resources";
+      case 18: return "Demanding accountability for Russian war crimes";
+      case 19: return "Advocating safe return of deported Ukrainians";
+      case 20: return "Having elections in Ukraine before peace settlement";
+      default: return "";
+    }
+  }
+
+  /***************************************************************************
+   * 8. Recalc the chart => gather all articles in the center
+   ***************************************************************************/
+  function recalcRadarChart() {
+    let selectedIds = [];
+    document.querySelectorAll(".treaty-section ul li").forEach((li) => {
+      const id = li.getAttribute("data-id");
+      if (id) selectedIds.push(parseInt(id, 10));
+    });
+    if (selectedIds.length === 0) {
+      radarChart.data.datasets[0].data = [0,0,0,0];
+      radarChart.data.datasets[1].data = [0,0,0,0];
+      radarChart.update();
+      return;
+    }
+
+    let sumUkSat = 0, sumRuSat = 0, sumUsSat = 0, sumEuSat = 0;
+    let sumUkNeg = 0, sumRuNeg = 0, sumUsNeg = 0, sumEuNeg = 0;
+    selectedIds.forEach((id) => {
+      const info = articlesInfo[id];
+      if (!info) return;
+      sumUkSat += info.Ukraine_sat;
+      sumRuSat += info.Russia_sat;
+      sumUsSat += info.USA_sat;
+      sumEuSat += info.EU_sat;
+      sumUkNeg += info.Ukraine_neg;
+      sumRuNeg += info.Russia_neg;
+      sumUsNeg += info.USA_neg;
+      sumEuNeg += info.EU_neg;
+    });
+    const count = selectedIds.length;
+    radarChart.data.datasets[0].data = [sumUkSat/count, sumRuSat/count, sumUsSat/count, sumEuSat/count];
+    radarChart.data.datasets[1].data = [sumUkNeg/count, sumRuNeg/count, sumUsNeg/count, sumEuNeg/count];
+    radarChart.update();
+  }
+
+  // Initial chart update
+  recalcRadarChart();
+</script>
+
+</body>
+</html>
