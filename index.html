@@ -32,25 +32,27 @@
       margin-top: 0;
     }
     /* ---------------------------
-       Preset buttons (just an example style)
+       Enhanced Preset Buttons
        --------------------------- */
-       #presetButtons {
-      max-width: 1300px;
-      margin: 1rem auto;
-      text-align: center;
-    }
-    #presetButtons button {
-      margin: 0 1rem;
-      padding: 0.5rem 1rem;
+       #instructions button {
+      margin: 0.5rem 0.3rem;
+      padding: 0.6rem 1.2rem;
       cursor: pointer;
       font-size: 1rem;
       font-family: "Georgia", serif;
       border-radius: 6px;
-      border: 1px solid #999;
-      background-color: #eee;
+      border: none;
+      background: linear-gradient(to bottom, #eee, #ccc);
+      transition: background 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     }
-    #presetButtons button:hover {
-      background-color: #ddd;
+    #instructions button:hover {
+      background: linear-gradient(to bottom, #ddd, #bbb);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    #instructions button:active {
+      background: linear-gradient(to bottom, #ccc, #aaa);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
     }
 
     /* ---------------------------
@@ -146,6 +148,7 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      transition: transform 0.3s ease-out; /* so we can animate the FLIP transform */
     }
     li:hover {
       background-color: #f0f0f0;
@@ -194,6 +197,7 @@
       padding: 5px;
       margin: 5px 0;
       cursor: pointer;
+      transition: transform 0.3s ease-out; /* so we can animate the FLIP transform */
     }
     .treaty-section ul li:hover {
       background-color: #f5f5f5;
@@ -230,6 +234,39 @@
     }
     #chartLegend li {
       margin-bottom: 0.5rem;
+      transition: transform 0.3s ease-out; /* so we can animate the FLIP transform */
+    }
+
+
+/* =========================
+       (2) HIGHLIGHT FOR NEGOTIATION
+       ========================= */
+       .highlight-negotiation {
+  background-color: #ffffcc !important; /* highlight in light yellow */
+  border: 2px solid #ffcc00 !important;
+}
+    /* =========================
+       (3) The \"Optimize Draft\" button style
+       ========================= */
+    #optimizeButton {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-family: "Georgia", serif;
+      border-radius: 6px;
+      border: none;
+      background: linear-gradient(to bottom, #eee, #ccc);
+      transition: background 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    #optimizeButton:hover {
+      background: linear-gradient(to bottom, #ddd, #bbb);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    #optimizeButton:active {
+      background: linear-gradient(to bottom, #ccc, #aaa);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
     }
   </style>
 </head>
@@ -241,8 +278,14 @@
 
 
 
+  <style>
+    #instructions h1, #instructions h2 {
+      text-align: center;
+    }
+  </style>
 <!-- Instructions Frame -->
-<div id="instructions">
+<div id="instructions"> 
+  <h1>Peace Agreement Negotiation Tool</h1>
   <h2>Instructions</h2>
   <p>
     The radar chart serves as a visualization tool for assessing the viability of potential peace agreements between Ukraine and Russia. The chart can help negotiators identify which combinations of agreement items might achieve a workable balance that keeps all parties above their minimum requirements while maximizing areas of mutual satisfaction.
@@ -367,6 +410,7 @@
     <div id="radarContainer">
       <canvas id="radarChart"></canvas>
       <!-- Chart Legend -->
+       
       <div id="chartLegend">
         <p><strong>Legend:</strong></p>
         <ul>
@@ -374,14 +418,16 @@
           <li><span style="color:rgba(54,162,235,1)">Negotiability</span>: Blue area representing negotiability scores.</li>
           <li><span style="color:red; border-bottom: 1px dashed black;">Minimum Acceptable Threshold</span>: Red dashed line indicating the minimum acceptable level.</li>
         </ul>
-        <p>
-          The minimum acceptable threshold is calculated as a percentage of the maximum satisfaction rate (here assumed as 60% of a maximum of 10, resulting in a threshold of 6). Adjust these values as needed.
-        </p>
+        <!-- (6) The new \"Optimize Draft\" button under the radar chart -->
+        <div style="text-align: center; width: 100%; margin-top: 1rem;"></div>
+        <button id="optimizeButton" onclick="optimizeDraft()">Optimize Draft</button>
+        </div>
+        
       </div>
     </div>
   </div>
-
 </div><!-- end .container -->
+
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -755,7 +801,7 @@ function checkConflicts(newArticleId) {
       case 9:  return "9-Imposing restrictions on Ukraine’s military...";
       case 10: return "10-Developing Ukrainian military-industrial complex";
       case 11: return "11-Keeping Ukrainian Army advanced & NATO-compatible";
-      case 12: return "12-Considering peacekeeping forces, demilitarized zones";
+      case 12: return "12-Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability";
       case 13: return "13-Removal/easing of Western sanctions";
       case 14: return "14-Keeping Western sanctions tight";
       case 15: return "15-Releasing Russian frozen assets";
@@ -764,7 +810,7 @@ function checkConflicts(newArticleId) {
       case 18: return "18-Allowing Western companies to use resources";
       case 19: return "19-Demanding accountability for Russian war crimes";
       case 20: return "20-Advocating safe return of deported Ukrainians";
-      case 21: return "Having elections in Ukraine before peace settlement";
+      case 21: return "21-Having elections in Ukraine before peace settlement";
       default: return "";
     }
   }
@@ -852,10 +898,218 @@ function checkConflicts(newArticleId) {
       });
     }
   }
-
   // Initial chart update
   recalcRadarChart();
+
+/***************************************************************************
+ * 10. Add the "Optimize Draft" logic here at the bottom
+ ***************************************************************************/
+
+// Helper: Return array of article IDs in the center
+function getCenterArticles() {
+  const ids = [];
+  document.querySelectorAll(".treaty-section ul li").forEach((li) => {
+    const idStr = li.getAttribute("data-id");
+    if (idStr) ids.push(parseInt(idStr, 10));
+  });
+  return ids;
+}
+
+// Helper: Compute each stakeholder's average satisfaction for center items
+function getStakeholdersData() {
+  const centerIds = getCenterArticles();
+  let sumUkSat=0, sumRuSat=0, sumUsSat=0, sumEuSat=0;
+  const count = centerIds.length;
+  centerIds.forEach((id) => {
+    const info = articlesInfo[id];
+    if (info) {
+      sumUkSat += info.Ukraine_sat;
+      sumRuSat += info.Russia_sat;
+      // Make sure you have .USA_sat and .EU_sat in your articlesInfo
+      sumUsSat += info.USA_sat;  
+      sumEuSat += info.EU_sat;   
+    }
+  });
+  return [
+    { name: "Ukraine", sat: count ? sumUkSat / count : 0 },
+    { name: "Russia",  sat: count ? sumRuSat / count : 0 },
+    { name: "USA",     sat: count ? sumUsSat / count : 0 },
+    { name: "Europe",  sat: count ? sumEuSat / count : 0 }
+  ];
+}
+
+// Identify which stakeholder is below threshold or has the absolute lowest
+function findLowestStakeholder() {
+  const data = getStakeholdersData();
+  if (!data.length) return {};
+
+  // 1) Check if Ukraine or Russia is below threshold
+  let below = data.filter(d => 
+    (d.name === "Ukraine" || d.name === "Russia") && d.sat < thresholdValue
+  );
+  if (below.length) {
+    below.sort((a,b) => a.sat - b.sat);
+    return { lowestStakeholder: below[0].name };
+  }
+  // 2) Then check if US or EU is below threshold
+  below = data.filter(d => 
+    (d.name === "USA" || d.name === "Europe") && d.sat < thresholdValue
+  );
+  if (below.length) {
+    below.sort((a,b) => a.sat - b.sat);
+    return { lowestStakeholder: below[0].name };
+  }
+  // 3) If none are below threshold, pick the absolute lowest with priority UA/RU
+  data.sort((a,b) => a.sat - b.sat);
+  // pick the first found that's UA/RU, else pick the absolute first
+  let candidate = data.find(d => (d.name === "Ukraine" || d.name === "Russia")) 
+                || data[0];
+  return { lowestStakeholder: candidate.name };
+}
+
+// Among the other 3 stakeholders, pick one with highest satisfaction
+function findHighestSatisfactionStakeholder(excludeName) {
+  const data = getStakeholdersData().filter(d => d.name !== excludeName);
+  if (!data.length) return null;
+  data.sort((a,b) => b.sat - a.sat);
+
+  // "less important first (US, EU)"
+  const americansOrEuropeans = data.filter(d => d.name === "USA" || d.name === "Europe");
+  if (americansOrEuropeans.length) {
+    // pick the highest from americansOrEuropeans
+    americansOrEuropeans.sort((a,b) => b.sat - a.sat);
+    return americansOrEuropeans[0].name;
+  }
+  // Otherwise pick the top from the entire array
+  return data[0].name;
+}
+
+// This function reorders & highlights items from the "donor" stakeholder
+// to the top of their category in the center
+function reorderAndHighlightNegotiationItems(donorName) {
+  const centerLis = document.querySelectorAll(".treaty-section ul li");
+  const itemArray = [];
+
+  // 1) Store old bounding rect for each item
+  const oldRects = new Map();
+  centerLis.forEach(li => {
+    const rect = li.getBoundingClientRect();
+    oldRects.set(li, rect);
+  });
+
+  centerLis.forEach(li => {
+    const idStr = li.getAttribute("data-id");
+    if (!idStr) return;
+    const id = parseInt(idStr, 10);
+    const catSection = li.closest(".treaty-section").id.replace("treaty-", "");
+    if (!articlesInfo[id]) return;
+
+    // Determine the donor's 'pos' for this article
+    let donorPos = 0;
+    switch(donorName) {
+      case "Ukraine": donorPos = articlesInfo[id].Ukraine_pos; break;
+      case "Russia":  donorPos = articlesInfo[id].Russia_pos;  break;
+      case "USA":     donorPos = 2; break; 
+      case "Europe":  donorPos = 2; break;
+    }
+    itemArray.push({
+      liElement: li,
+      articleId: id,
+      position: donorPos,
+      catSection
+    });
+  });
+
+  // 2) Sort them so that 'position=2' items come first, then 0, then 1
+  //    Because you want the negotiable items at the top
+  //    We'll define numeric priority: pos=2 => prio=1, pos=0 => prio=2, pos=1 => prio=3
+  function priority(pos) {
+    return (pos === 2) ? 1 : (pos === 0 ? 2 : 3);
+  }
+  itemArray.sort((a,b) => priority(a.position) - priority(b.position));
+
+  // 3) Re-insert them in sorted order
+  //    We'll do it per category, so we group by catSection:
+  const sectionsMap = {};
+  itemArray.forEach(item => {
+    if (!sectionsMap[item.catSection]) {
+      sectionsMap[item.catSection] = [];
+    }
+    sectionsMap[item.catSection].push(item);
+  });
+
+  for (let cat in sectionsMap) {
+    const sortedItems = sectionsMap[cat];
+    // We'll re-insert them from first to last => top item is first
+    const parentUl = document.querySelector(`#treaty-${cat} ul`);
+    if (!parentUl) continue;
+
+    // Insert them in ascending order
+    // The item at index 0 becomes the top of the list
+    sortedItems.forEach(obj => {
+      parentUl.insertBefore(obj.liElement, parentUl.firstChild);
+    });
+  }
+
+  // 4) Highlight only if donorName is UA or RU and pos=2
+  itemArray.forEach(item => {
+    if ((donorName === 'Ukraine' || donorName === 'Russia') && item.position === 2) {
+      item.liElement.classList.add("highlight-negotiation");
+    } else {
+      item.liElement.classList.remove("highlight-negotiation");
+    }
+  });
+
+  // 5) FLIP animation: measure new bounding rect, animate from old->new
+  itemArray.forEach(item => {
+    const li = item.liElement;
+    const newRect = li.getBoundingClientRect();
+    const oldRect = oldRects.get(li);
+    // compute how far it moved
+    const deltaX = oldRect.left - newRect.left;
+    const deltaY = oldRect.top - newRect.top;
+
+    // apply transform to start it from old position
+    li.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    li.style.transition = 'none';
+
+    // then in next frame, remove the transform so it transitions to new position
+    requestAnimationFrame(() => {
+      li.style.transition = 'transform 0.3s ease-out'; 
+      li.style.transform = '';
+    });
+  });
+}
+
+
+// The main function the "Optimize Draft" button calls
+function optimizeDraft() {
+  // 1) find stakeholder with lowest satisfaction
+  const {lowestStakeholder} = findLowestStakeholder();
+  const centerIds = getCenterArticles();
+  if (!lowestStakeholder || !centerIds.length) {
+    showErrorMessage("No articles or no stakeholder found to optimize.");
+    return;
+  }
+
+  // 2) find one stakeholder with highest satisfaction who can yield
+  const donorStakeholder = findHighestSatisfactionStakeholder(lowestStakeholder);
+  if (!donorStakeholder) {
+    showErrorMessage("No stakeholder found with high satisfaction.");
+    return;
+  }
+
+  // 3) reorder & highlight items from donor
+  reorderAndHighlightNegotiationItems(donorStakeholder);
+
+  // Recalc or show a message
+  recalcRadarChart();
+  showErrorMessage(`Reordered items from ${donorStakeholder} to help ${lowestStakeholder}.`);
+}
 </script>
 
 </body>
 </html>
+
+
+
