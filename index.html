@@ -209,18 +209,24 @@
       max-width: 480px;
       height: 400px;
       margin: 0 auto;
+      font-family: "Georgia", serif !important;
+      color: #000000 !important;
       background-color: #ffffff;
-      border: 1px solid #cccccc;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      padding: 0.5rem;
+      border: 2px solid #4d2121;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      padding: 1rem;
       box-sizing: border-box;
     }
     canvas {
       width: 100% !important;
       height: 100% !important;
     }
-    
+    /* Make radar chart texts more vivid */
+    .chartjs-render-monitor {
+      color: #000000 !important; /* Change text color to black */
+      font-weight: bold !important; /* Make text bold */
+    }
     /* Legend styling for the radar chart */
     #chartLegend {
       text-align: left;
@@ -255,13 +261,13 @@
       font-family: "Georgia", serif;
       border-radius: 6px;
       border: none;
-      background: linear-gradient(to bottom, #eee, #ccc);
+      background: linear-gradient(to bottom, #e0dcdc, #709ddc);
       transition: background 0.3s, box-shadow 0.3s;
       box-shadow: 0 2px 3px rgba(0,0,0,0.1);
       cursor: pointer;
     }
     #optimizeButton:hover {
-      background: linear-gradient(to bottom, #ddd, #bbb);
+      background: linear-gradient(to bottom, #ddd, #27559a);
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     #optimizeButton:active {
@@ -296,9 +302,11 @@
   <p>
     The most promising paths to agreement appear where multiple parties show both above-threshold satisfaction and meaningful negotiability scores. Negotiators should focus on these overlapping zones of flexibility while ensuring no party's overall satisfaction drops below their minimum acceptable threshold, as this would likely cause them to abandon talks. By balancing these metrics, negotiators can identify which combinations of agreement items offer the best chance of achieving a stable agreement.
   </p>
-  <button onclick="loadPreset(1)">Preset 1</button>
-  <button onclick="loadPreset(2)">Preset 2</button>
-  <button onclick="loadPreset(3)">Preset 3</button>
+  <div style="text-align: center;">
+    <button onclick="loadPreset(1)">Preset 1</button>
+    <button onclick="loadPreset(2)">Preset 2</button>
+    <button onclick="loadPreset(3)">Preset 3</button>
+  </div>
 </div>
 
 
@@ -313,11 +321,11 @@
     <div class="section-block">
       <h2>Territory and Sovereignty</h2>
       <ul data-section="territorial">
-        <li data-id="1" draggable="true">1-Returning Ukrainian occupied portions of Kursk region.</li>
+        <li data-id="1" draggable="true">1-Returning Ukrainian occupied portions of Kursk region</li>
         <li data-id="2" draggable="true">2-Returning all territories to Ukraine (1991 borders)</li>
-        <li data-id="3" draggable="true">3-Maintaining Russian control as of 2025</li>
-        <li data-id="4" draggable="true">4-Maintaining Russian control pre-2022 (Crimea, etc.)</li>
-        <li data-id="5" draggable="true">5-International recognition of occupied territories</li>
+        <li data-id="3" draggable="true">3-Maintaining Russian control over all occupied territories as of 2025</li>
+        <li data-id="4" draggable="true">4-Maintaining Russian control over Zaporizhzhia and Kherson and territories occupied before 2022 (Crimea and parts of the DNR/LNR)</li>
+        <li data-id="5" draggable="true">5-Ensuring international recognition of occupied territories as Russian territory</li>
       </ul>
     </div>
 
@@ -325,12 +333,12 @@
     <div class="section-block">
       <h2>Security Arrangements</h2>
       <ul data-section="security">
-        <li data-id="6" draggable="true">6-Ukraine renouncing ambitions to join NATO</li>
+        <li data-id="6" draggable="true">6-Ukraine renouncing its ambitions to join NATO</li>
         <li data-id="7" draggable="true">7-Granting Ukraine NATO membership</li>
-        <li data-id="8" draggable="true">8-Legally binding bilateral defense agreements</li>
-        <li data-id="9" draggable="true">9-Imposing restrictions on Ukraine’s military...</li>
-        <li data-id="10" draggable="true">10-Developing Ukrainian military-industrial complex</li>
-        <li data-id="11" draggable="true">11-Keeping Ukrainian Army advanced & NATO-compatible</li>
+        <li data-id="8" draggable="true">8-Legally binding bilateral defense agreements between Western nations and Ukraine</li>
+        <li data-id="9" draggable="true">9-Imposing restrictions on Ukraine's military capabilities, including limits on troop numbers,  missile systems, and Western-supplied weapons</li>
+        <li data-id="10" draggable="true">10-Developing Ukrainian military-industrial complex and defense industry</li>
+        <li data-id="11" draggable="true">11-Keeping Ukrainian Army self-sufficient and technologically advanced, fully interoperable with NATO</li>
         <li data-id="12" draggable="true">12-Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability</li>
       </ul>
     </div>
@@ -340,12 +348,12 @@
     <div class="section-block">
       <h2>Economic Conditions</h2>
       <ul data-section="economic">
-        <li data-id="13" draggable="true">13-Removal/easing of Western sanctions</li>
-        <li data-id="14" draggable="true">14-Keeping Western sanctions tight</li>
-        <li data-id="15" draggable="true">15-Releasing Russian frozen assets</li>
-        <li data-id="16" draggable="true">16-Using Russian frozen assets to rebuild Ukraine</li>
-        <li data-id="17" draggable="true">17-Using Ukraine’s gas transit for EU supplies</li>
-        <li data-id="18" draggable="true">18-Allowing Western companies to use resources</li>
+        <li data-id="13" draggable="true">13-Removal or easing of Western sanctions that have constrained Russia's economy</li>
+        <li data-id="14" draggable="true">14-Keeping Western sanctions tight not to allow Russia rebuild its economy and improve miltech</li>
+        <li data-id="15" draggable="true">15-Releasing Russian frozen assets, returning them to Russia</li>
+        <li data-id="16" draggable="true">16-Using Russian frozen assets to rebuild Ukriane</li>
+        <li data-id="17" draggable="true">17-Using Ukraine's gas transit infrastructure for European energy supplies from Russia</li>
+        <li data-id="18" draggable="true">18-Allowing Western companies to use Ukrainain resources as raw materials</li>
       </ul>
     </div>
 
@@ -354,9 +362,9 @@
     <div class="section-block">
       <h2>Justice and Accountability</h2>
       <ul data-section="justice">
-        <li data-id="19" draggable="true">19-Demanding accountability for Russian war crimes</li>
-        <li data-id="20" draggable="true">20-Advocating safe return of deported Ukrainians</li>
-        <li data-id="21" draggable="true">21-Having elections in Ukraine before peace settlement</li>
+        <li data-id="19" draggable="true">19-Demanding accountability for Russian war crimes, including trials for those responsible for atrocities and crimes against humanity</li>
+        <li data-id="20" draggable="true">20- Advocating for the safe return of forcibly deported Ukrainians, including  kidnapped children</li>
+        <li data-id="21" draggable="true">21-Having elections in Ukraine before peace/ceasefire settlement</li>
       </ul>
     </div>
   </div>
@@ -409,8 +417,11 @@
     <h2>Negotiation Analysis</h2>
     <div id="radarContainer">
       <canvas id="radarChart"></canvas>
+      <!-- Optimize Draft Button -->
+      <div style="text-align: center; width: 100%; margin-top: 1rem;">
+        <button id="optimizeButton" onclick="optimizeDraft()">Optimize Draft</button>
+      </div>
       <!-- Chart Legend -->
-       
       <div id="chartLegend">
         <p><strong>Legend:</strong></p>
         <ul>
@@ -418,11 +429,6 @@
           <li><span style="color:rgba(54,162,235,1)">Negotiability</span>: Blue area representing negotiability scores.</li>
           <li><span style="color:red; border-bottom: 1px dashed black;">Minimum Acceptable Threshold</span>: Red dashed line indicating the minimum acceptable level.</li>
         </ul>
-        <!-- (6) The new \"Optimize Draft\" button under the radar chart -->
-        <div style="text-align: center; width: 100%; margin-top: 1rem;"></div>
-        <button id="optimizeButton" onclick="optimizeDraft()">Optimize Draft</button>
-        </div>
-        
       </div>
     </div>
   </div>
@@ -537,18 +543,20 @@
     type: 'radar',
     data: radarData,
     options: {
-        scale: {
-            pointLabels: {
-                fontSize: 14, // Increase font size
-                fontColor: 'black', // Change font color to black
-                fontStyle: 'bold' // Make labels bold
-            },
-            ticks: {
-                fontSize: 12, // Increase font size for ticks
-                fontColor: 'black' // Change font color for ticks to black
-            }
+    scale: {
+        pointLabels: {
+            fontSize: 14,
+            fontColor: '#000000',
+            fontFamily: 'Georgia, serif',
+            fontStyle: 'bold'
+        },
+        ticks: {
+            fontSize: 12,
+            fontColor: '#000000',
+            fontFamily: 'Georgia, serif'
         }
     }
+}
 });
   /***************************************************************************
    * 4. Drag & Drop handling
@@ -791,26 +799,26 @@ function checkConflicts(newArticleId) {
     const idNum = parseInt(articleId, 10);
     switch(idNum) {
       case 1:  return "1-Returning Ukrainian occupied portions of Kursk region";
-      case 2:  return "2-Returning all territories to Ukraine (1991 borders)";
-      case 3:  return "3-Maintaining Russian control as of 2025";
-      case 4:  return "4-Maintaining Russian control pre-2022 (Crimea, etc.)";
-      case 5:  return "5-International recognition of occupied territories";
+      case 2:  return "2-Returning all territories to Ukraine within 1991 borders";
+      case 3:  return "3-Maintaining Russian control over all occupied territories as of 2025";
+      case 4:  return "4-Maintaining Russian control over Zaporizhzhia and Kherson and territories occupied before 2022 (Crimea and parts of the DNR/LNR)";
+      case 5:  return "5-Ensuring international recognition of occupied territories as Russian territory";
       case 6:  return "6-Ukraine renouncing ambitions to join NATO";
       case 7:  return "7-Granting Ukraine NATO membership";
-      case 8:  return "8-Legally binding bilateral defense agreements";
-      case 9:  return "9-Imposing restrictions on Ukraine’s military...";
-      case 10: return "10-Developing Ukrainian military-industrial complex";
-      case 11: return "11-Keeping Ukrainian Army advanced & NATO-compatible";
+      case 8:  return "8-Legally binding bilateral defense agreements between Ukraine and Western nations";
+      case 9:  return "9-Imposing restrictions on Ukraine's military capabilities, including limits on troop numbers,  missile systems, and Western-supplied weapons";
+      case 10: return "10-Developing Ukrainian military-industrial complex and defense industry";
+      case 11: return "11-Keeping Ukrainian Army self-sufficient and technologically advanced, fully interoperable with NATO";
       case 12: return "12-Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability";
-      case 13: return "13-Removal/easing of Western sanctions";
-      case 14: return "14-Keeping Western sanctions tight";
-      case 15: return "15-Releasing Russian frozen assets";
-      case 16: return "16-Using Russian frozen assets to rebuild Ukraine";
-      case 17: return "17-Using Ukraine’s gas transit for EU supplies";
-      case 18: return "18-Allowing Western companies to use resources";
-      case 19: return "19-Demanding accountability for Russian war crimes";
-      case 20: return "20-Advocating safe return of deported Ukrainians";
-      case 21: return "21-Having elections in Ukraine before peace settlement";
+      case 13: return "13-Removal or easing of Western sanctions that have constrained Russia's economy";
+      case 14: return "14-Keeping Western sanctions tight not to allow Russia rebuild its economy and improve miltech";
+      case 15: return "15-Releasing Russian frozen assets, returning them to Russia";
+      case 16: return "16-Using Russian frozen assets to rebuild Ukriane";
+      case 17: return "17-Using Ukraine’s gas transit infrastructure for European energy supplies from Russia";
+      case 18: return "18-Allowing Western companies to use Ukrainain resources as raw materials";
+      case 19: return "19-Demanding accountability for Russian war crimes, including trials for those responsible for atrocities and crimes against humanity";
+      case 20: return "20-Advocating for the safe return of forcibly deported Ukrainians, including  kidnapped children";
+      case 21: return "21-Having elections in Ukraine before peace/ceasefire settlement";
       default: return "";
     }
   }
