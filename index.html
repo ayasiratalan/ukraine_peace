@@ -341,6 +341,7 @@
     </div>
   </div><!-- end .container -->
 
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -729,157 +730,50 @@
     /***************************************************************************
      * 9. Recalc the chart => gather all articles in the center
      ***************************************************************************/
-    // function recalcRadarChart() {
-    //   let selectedIds = [];
-    //   document.querySelectorAll(".treaty-section ul li").forEach((li) => {
-    //     const id = li.getAttribute("data-id");
-    //     if (id) selectedIds.push(parseInt(id, 10));
-    //   });
-    //   if (selectedIds.length === 0) {
-    //     radarChart.data.datasets[0].data = [0,0,0,0];
-    //     radarChart.data.datasets[1].data = [0,0,0,0];
-    //     radarChart.update();
-    //     return;
-    //   }
-
-    //   let sumUkSat = 0, sumRuSat = 0, sumUsSat = 0, sumEuSat = 0;
-    //   let sumUkNeg = 0, sumRuNeg = 0, sumUsNeg = 0, sumEuNeg = 0;
-    //   selectedIds.forEach((id) => {
-    //     const info = articlesInfo[id];
-    //     if (!info) return;
-    //     sumUkSat += info.Ukraine_sat;
-    //     sumRuSat += info.Russia_sat;
-    //     sumUsSat += info.USA_sat;
-    //     sumEuSat += info.EU_sat;
-    //     sumUkNeg += info.Ukraine_neg;
-    //     sumRuNeg += info.Russia_neg;
-    //     sumUsNeg += info.USA_neg;
-    //     sumEuNeg += info.EU_neg;
-    //   });
-    //   const count = selectedIds.length;
-    //   radarChart.data.datasets[0].data = [
-    //     sumUkSat/count,
-    //     sumRuSat/count,
-    //     sumUsSat/count,
-    //     sumEuSat/count
-    //   ];
-    //   radarChart.data.datasets[1].data = [
-    //     sumUkNeg/count,
-    //     sumRuNeg/count,
-    //     sumUsNeg/count,
-    //     sumEuNeg/count
-    //   ];
-    //   radarChart.update();
-    // }
-
-
     function recalcRadarChart() {
-  const selectedIds = [];
-  document.querySelectorAll(".treaty-section ul li").forEach((li) => {
-    const idStr = li.getAttribute("data-id");
-    if (idStr) selectedIds.push(parseInt(idStr, 10));
-  });
+      let selectedIds = [];
+      document.querySelectorAll(".treaty-section ul li").forEach((li) => {
+        const id = li.getAttribute("data-id");
+        if (id) selectedIds.push(parseInt(id, 10));
+      });
+      if (selectedIds.length === 0) {
+        radarChart.data.datasets[0].data = [0,0,0,0];
+        radarChart.data.datasets[1].data = [0,0,0,0];
+        radarChart.update();
+        return;
+      }
 
-  // If no articles, set all to zero
-  if (selectedIds.length === 0) {
-    radarChart.data.datasets[0].data = [0, 0, 0, 0]; // satisfaction
-    radarChart.data.datasets[1].data = [0, 0, 0, 0]; // negotiability
-    radarChart.update();
-    return;
-  }
-
-  // Prepare arrays to gather satisfaction and negotiability
-  // ... plus arrays for storing "opposed" items for UA/RU
-  let uaSatSum = 0, ruSatSum = 0, usSatSum = 0, euSatSum = 0;
-  let uaNegSum = 0, ruNegSum = 0, usNegSum = 0, euNegSum = 0;
-  let uaCount = 0, ruCount = 0, usCount = selectedIds.length, euCount = selectedIds.length;
-
-  // We'll store the "opposed" satisfaction values (pos=0) for each side
-  const opposedUaSats = []; 
-  const opposedRuSats = [];
-
-  // Loop over each selected ID
-  selectedIds.forEach((id) => {
-    const info = articlesInfo[id];
-    if (!info) return;
-
-    // (1) Check if Ukraine opposes (pos=0)
-    if (info.Ukraine_pos === 0) {
-      opposedUaSats.push(info.Ukraine_sat);
-    } else {
-      // If not opposed, we add this to UA's sum
-      uaSatSum += info.Ukraine_sat;
-      uaCount++;
+      let sumUkSat = 0, sumRuSat = 0, sumUsSat = 0, sumEuSat = 0;
+      let sumUkNeg = 0, sumRuNeg = 0, sumUsNeg = 0, sumEuNeg = 0;
+      selectedIds.forEach((id) => {
+        const info = articlesInfo[id];
+        if (!info) return;
+        sumUkSat += info.Ukraine_sat;
+        sumRuSat += info.Russia_sat;
+        sumUsSat += info.USA_sat;
+        sumEuSat += info.EU_sat;
+        sumUkNeg += info.Ukraine_neg;
+        sumRuNeg += info.Russia_neg;
+        sumUsNeg += info.USA_neg;
+        sumEuNeg += info.EU_neg;
+      });
+      const count = selectedIds.length;
+      radarChart.data.datasets[0].data = [
+        sumUkSat/count,
+        sumRuSat/count,
+        sumUsSat/count,
+        sumEuSat/count
+      ];
+      radarChart.data.datasets[1].data = [
+        sumUkNeg/count,
+        sumRuNeg/count,
+        sumUsNeg/count,
+        sumEuNeg/count
+      ];
+      radarChart.update();
     }
 
-    // (2) Check if Russia opposes (pos=0)
-    if (info.Russia_pos === 0) {
-      opposedRuSats.push(info.Russia_sat);
-    } else {
-      ruSatSum += info.Russia_sat;
-      ruCount++;
-    }
 
-    // (3) US/EU do not have pos=0 in your data, so just average them normally
-    usSatSum += info.USA_sat;
-    euSatSum += info.EU_sat;
-
-    // (4) Negotiability always summed/averaged
-    uaNegSum += info.Ukraine_neg;
-    ruNegSum += info.Russia_neg;
-    usNegSum += info.USA_neg;
-    euNegSum += info.EU_neg;
-  });
-
-  // === Compute the final satisfaction for each side ===
-  // Ukraine's satisfaction:
-  let finalUaSat = 0;
-  if (opposedUaSats.length > 0) {
-    // If Ukraine opposes ANY item, pick the minimum among them:
-    // e.g. if there's opposed items with UA_sat=2 and UA_sat=3,
-    // finalUaSat = 2 (can't go up just by adding a "less opposed" item)
-    finalUaSat = Math.min(...opposedUaSats);
-  } else {
-    // If no opposed items, average over the items UA doesn't oppose
-    finalUaSat = (uaCount > 0) ? (uaSatSum / uaCount) : 0;
-  }
-
-  // Russia's satisfaction:
-  let finalRuSat = 0;
-  if (opposedRuSats.length > 0) {
-    finalRuSat = Math.min(...opposedRuSats);
-  } else {
-    finalRuSat = (ruCount > 0) ? (ruSatSum / ruCount) : 0;
-  }
-
-  // For US/EU, no pos=0 logic, so standard average over all selected
-  // (If you want them to skip opposed items or do something else, adapt similarly)
-  const finalUsSat = (selectedIds.length > 0) ? (usSatSum / selectedIds.length) : 0;
-  const finalEuSat = (selectedIds.length > 0) ? (euSatSum / selectedIds.length) : 0;
-
-  // === Compute negotiability (just average them) ===
-  const count = selectedIds.length;
-  const finalUaNeg = uaNegSum / count;
-  const finalRuNeg = ruNegSum / count;
-  const finalUsNeg = usNegSum / count;
-  const finalEuNeg = euNegSum / count;
-
-  // === Update chart ===
-  radarChart.data.datasets[0].data = [
-    finalUaSat,
-    finalRuSat,
-    finalUsSat,
-    finalEuSat
-  ];
-  radarChart.data.datasets[1].data = [
-    finalUaNeg,
-    finalRuNeg,
-    finalUsNeg,
-    finalEuNeg
-  ];
-
-  radarChart.update();
-}
 
     /***************************************************************************
      * 10. Presets for quick loading
