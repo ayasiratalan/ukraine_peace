@@ -18,18 +18,8 @@
       color: #333;
       line-height: 1.6;
     }
-    .negotiability-frame {
-      background-color: #fff8e1;
-      border: 2px dashed #ff9800;
-      padding: 0.75rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-    .negotiability-frame h3 {
-      margin-top: 0;
-      font-size: 1.1rem;
-      color: #ff9800;
-    }
+
+    /* Removed negotiability-frame styling */
 
     /* ---------------------------
        Container & Card Styles
@@ -90,7 +80,6 @@
     /* ---------------------------
        Subheader Enhancements
        --------------------------- */
-    /* Left Column Subheaders */
     .section-block h2 {
       background-color: #e8efff;
       border-left: 4px solid #007bff;
@@ -99,7 +88,6 @@
       font-size: 1.1rem;
       font-weight: 500;
     }
-    /* Center Column Treaty Subheaders */
     .treaty-section h3 {
       background-color: #f0f8ff;
       border-left: 4px solid #007bff;
@@ -148,6 +136,13 @@
     button:active {
       background-color: #005cbf;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+    /* New style for Start Again button */
+    .start-again-btn {
+      background-color: #d9534f; /* different red color */
+    }
+    .start-again-btn:hover {
+      background-color: #c9302c;
     }
 
     /* ---------------------------
@@ -200,11 +195,11 @@
     }
 
     /* ---------------------------
-       Highlight Animation
+       Highlight Class
        --------------------------- */
     .highlight-negotiation {
-      background-color: #fffbcc !important;
-      border: 2px solid #ffcc00 !important;
+      background-color: #ffdea5 !important; /* light yellow */
+      border: 2px solid #ffcc00 !important; /* orange border */
     }
 
     /* Center headings styles for instructions */
@@ -215,12 +210,6 @@
 </head>
 <body>
 
-  <style>
-    #instructions h1, #instructions h2 {
-      text-align: center;
-    }
-  </style>
-<!-- Instructions Frame -->
 <div id="instructions"> 
   <h1>Peace Agreement Negotiation Tool</h1>
   <h2>Instructions</h2>
@@ -237,8 +226,12 @@
     <button onclick="loadPreset(1)">Preset 1</button>
     <button onclick="loadPreset(2)">Preset 2</button>
     <button onclick="loadPreset(3)">Preset 3</button>
+    <br>
+    <!-- Start Again button with a different style -->
+    <button class="start-again-btn" onclick="startAgain()">Start Again</button>
   </div>
 </div>
+
 
   <div class="container">
     <!-- LEFT COLUMN: Available Articles -->
@@ -301,12 +294,6 @@
         <div id="errorMessage" style="display:none; margin-bottom:1rem; padding:0.75rem; background-color:#ffe6e6; border:1px solid #ff8888; text-align:center;"></div>
         <h1>Ukraine-Russia Peace Agreement Draft</h1>
 
-        <!-- Negotiability Areas Frame -->
-        <div id="negotiabilityFrame" class="negotiability-frame">
-          <h3>Negotiability Areas</h3>
-          <ul></ul>
-        </div>
-
         <!-- Treaty Sections -->
         <div class="treaty-section" id="treaty-territorial">
           <h3>Territory and Sovereignty</h3>
@@ -358,40 +345,39 @@
     /***************************************************************************
      * 1. Data for each article:
      *    - <actor>_sat, <actor>_neg
-     *    - Ukraine_pos, Russia_pos (used for icons)
+     *    - Ukraine_pos, Russia_pos (used for icons: 1 => ✔, 0 => ✖, 2 => ?)
      ***************************************************************************/
-     const articlesInfo = {
-  1: { Ukraine_sat: 7, Ukraine_neg: 9, Russia_sat: 10, Russia_neg: 2, USA_sat: 8, USA_neg: 8, EU_sat: 8, EU_neg: 8, Ukraine_pos: 2, Russia_pos: 1 },
-  2: { Ukraine_sat: 3, Ukraine_neg: 5, Russia_sat: 10, Russia_neg: 6, USA_sat: 6, USA_neg: 7, EU_sat: 4, EU_neg: 7, Ukraine_pos: 0, Russia_pos: 1 },
-  3: { Ukraine_sat: 5, Ukraine_neg: 7, Russia_sat: 9, Russia_neg: 5, USA_sat: 6, USA_neg: 8, EU_sat: 6, EU_neg: 8, Ukraine_pos: 0, Russia_pos: 1 },
-  4: { Ukraine_sat: 2, Ukraine_neg: 3, Russia_sat: 10, Russia_neg: 7, USA_sat: 5, USA_neg: 7, EU_sat: 3, EU_neg: 5, Ukraine_pos: 0, Russia_pos: 1 },
-  5: { Ukraine_sat: 3, Ukraine_neg: 6, Russia_sat: 10, Russia_neg: 4, USA_sat: 7, USA_neg: 7, EU_sat: 5, EU_neg: 7, Ukraine_pos: 2, Russia_pos: 1 },
-  6: { Ukraine_sat: 10, Ukraine_neg: 7, Russia_sat: 2, Russia_neg: 2, USA_sat: 5, USA_neg: 7, EU_sat: 7, EU_neg: 8, Ukraine_pos: 1, Russia_pos: 0 },
-  7: { Ukraine_sat: 9, Ukraine_neg: 6, Russia_sat: 3, Russia_neg: 5, USA_sat: 7, USA_neg: 7, EU_sat: 8, EU_neg: 7, Ukraine_pos: 1, Russia_pos: 0 },
-  8: { Ukraine_sat: 2, Ukraine_neg: 3, Russia_sat: 10, Russia_neg: 6, USA_sat: 5, USA_neg: 7, EU_sat: 4, EU_neg: 6, Ukraine_pos: 0, Russia_pos: 1 },
-  9: { Ukraine_sat: 10, Ukraine_neg: 5, Russia_sat: 4, Russia_neg: 6, USA_sat: 7, USA_neg: 7, EU_sat: 9, EU_neg: 6, Ukraine_pos: 1, Russia_pos: 0 },
-  10: { Ukraine_sat: 10, Ukraine_neg: 4, Russia_sat: 4, Russia_neg: 5, USA_sat: 8, USA_neg: 7, EU_sat: 9, EU_neg: 6, Ukraine_pos: 1, Russia_pos: 0 },
-  11: { Ukraine_sat: 9, Ukraine_neg: 6, Russia_sat: 5, Russia_neg: 6, USA_sat: 7, USA_neg: 7, EU_sat: 8, EU_neg: 7, Ukraine_pos: 1, Russia_pos: 0 },
-  12: { Ukraine_sat: 4, Ukraine_neg: 6, Russia_sat: 10, Russia_neg: 5, USA_sat: 7, USA_neg: 8, EU_sat: 6, EU_neg: 7, Ukraine_pos: 0, Russia_pos: 1 },
-  13: { Ukraine_sat: 10, Ukraine_neg: 7, Russia_sat: 3, Russia_neg: 5, USA_sat: 6, USA_neg: 8, EU_sat: 7, EU_neg: 7, Ukraine_pos: 1, Russia_pos: 0 },
-  14: { Ukraine_sat: 4, Ukraine_neg: 6, Russia_sat: 9, Russia_neg: 5, USA_sat: 6, USA_neg: 8, EU_sat: 5, EU_neg: 6, Ukraine_pos: 0, Russia_pos: 1 },
-  15: { Ukraine_sat: 10, Ukraine_neg: 7, Russia_sat: 3, Russia_neg: 4, USA_sat: 7, USA_neg: 7, EU_sat: 7, EU_neg: 7, Ukraine_pos: 1, Russia_pos: 0 },
-  16: { Ukraine_sat: 6, Ukraine_neg: 7, Russia_sat: 8, Russia_neg: 8, USA_sat: 6, USA_neg: 8, EU_sat: 8, EU_neg: 7, Ukraine_pos: 2, Russia_pos: 1 },
-  17: { Ukraine_sat: 6, Ukraine_neg: 9, Russia_sat: 6, Russia_neg: 8, USA_sat: 8, USA_neg: 8, EU_sat: 8, EU_neg: 8, Ukraine_pos: 1, Russia_pos: 2 },
-  18: { Ukraine_sat: 10, Ukraine_neg: 6, Russia_sat: 2, Russia_neg: 3, USA_sat: 6, USA_neg: 8, EU_sat: 8, EU_neg: 7, Ukraine_pos: 1, Russia_pos: 0 },
-  19: { Ukraine_sat: 10, Ukraine_neg: 3, Russia_sat: 5, Russia_neg: 7, USA_sat: 8, USA_neg: 8, EU_sat: 9, EU_neg: 6, Ukraine_pos: 1, Russia_pos: 2 },
-  20: { Ukraine_sat: 4, Ukraine_neg: 5, Russia_sat: 8, Russia_neg: 7, USA_sat: 7, USA_neg: 7, EU_sat: 5, EU_neg: 6, Ukraine_pos: 0, Russia_pos: 1 }
-};
-
+    const articlesInfo = {
+      1: { Ukraine_sat: 7,  Ukraine_neg: 9,  Russia_sat: 10, Russia_neg: 2,  USA_sat: 8,  USA_neg: 8,  EU_sat: 8,  EU_neg: 8,  Ukraine_pos: 2, Russia_pos: 1 },
+      2: { Ukraine_sat: 3,  Ukraine_neg: 5,  Russia_sat: 10, Russia_neg: 6,  USA_sat: 6,  USA_neg: 7,  EU_sat: 4,  EU_neg: 7,  Ukraine_pos: 0, Russia_pos: 1 },
+      3: { Ukraine_sat: 5,  Ukraine_neg: 7,  Russia_sat: 9,  Russia_neg: 5,  USA_sat: 6,  USA_neg: 8,  EU_sat: 6,  EU_neg: 8,  Ukraine_pos: 0, Russia_pos: 1 },
+      4: { Ukraine_sat: 2,  Ukraine_neg: 3,  Russia_sat: 10, Russia_neg: 7,  USA_sat: 5,  USA_neg: 7,  EU_sat: 3,  EU_neg: 5,  Ukraine_pos: 0, Russia_pos: 1 },
+      5: { Ukraine_sat: 3,  Ukraine_neg: 6,  Russia_sat: 10, Russia_neg: 4,  USA_sat: 7,  USA_neg: 7,  EU_sat: 5,  EU_neg: 7,  Ukraine_pos: 2, Russia_pos: 1 },
+      6: { Ukraine_sat: 10, Ukraine_neg: 7,  Russia_sat: 2,  Russia_neg: 2,  USA_sat: 5,  USA_neg: 7,  EU_sat: 7,  EU_neg: 8,  Ukraine_pos: 1, Russia_pos: 0 },
+      7: { Ukraine_sat: 9,  Ukraine_neg: 6,  Russia_sat: 3,  Russia_neg: 5,  USA_sat: 7,  USA_neg: 7,  EU_sat: 8,  EU_neg: 7,  Ukraine_pos: 1, Russia_pos: 0 },
+      8: { Ukraine_sat: 2,  Ukraine_neg: 3,  Russia_sat: 10, Russia_neg: 6,  USA_sat: 5,  USA_neg: 7,  EU_sat: 4,  EU_neg: 6,  Ukraine_pos: 0, Russia_pos: 1 },
+      9: { Ukraine_sat: 10, Ukraine_neg: 5,  Russia_sat: 4,  Russia_neg: 6,  USA_sat: 7,  USA_neg: 7,  EU_sat: 9,  EU_neg: 6,  Ukraine_pos: 1, Russia_pos: 0 },
+      10:{ Ukraine_sat: 10, Ukraine_neg: 4,  Russia_sat: 4,  Russia_neg: 5,  USA_sat: 8,  USA_neg: 7,  EU_sat: 9,  EU_neg: 6,  Ukraine_pos: 1, Russia_pos: 0 },
+      11:{ Ukraine_sat: 9,  Ukraine_neg: 6,  Russia_sat: 5,  Russia_neg: 6,  USA_sat: 7,  USA_neg: 7,  EU_sat: 8,  EU_neg: 7,  Ukraine_pos: 1, Russia_pos: 0 },
+      12:{ Ukraine_sat: 4,  Ukraine_neg: 6,  Russia_sat: 10, Russia_neg: 5,  USA_sat: 7,  USA_neg: 8,  EU_sat: 6,  EU_neg: 7,  Ukraine_pos: 0, Russia_pos: 1 },
+      13:{ Ukraine_sat: 10, Ukraine_neg: 7,  Russia_sat: 3,  Russia_neg: 5,  USA_sat: 6,  USA_neg: 8,  EU_sat: 7,  EU_neg: 7,  Ukraine_pos: 1, Russia_pos: 0 },
+      14:{ Ukraine_sat: 4,  Ukraine_neg: 6,  Russia_sat: 9,  Russia_neg: 5,  USA_sat: 6,  USA_neg: 8,  EU_sat: 5,  EU_neg: 6,  Ukraine_pos: 0, Russia_pos: 1 },
+      15:{ Ukraine_sat: 10, Ukraine_neg: 7,  Russia_sat: 3,  Russia_neg: 4,  USA_sat: 7,  USA_neg: 7,  EU_sat: 7,  EU_neg: 7,  Ukraine_pos: 1, Russia_pos: 0 },
+      16:{ Ukraine_sat: 6,  Ukraine_neg: 7,  Russia_sat: 8,  Russia_neg: 8,  USA_sat: 6,  USA_neg: 8,  EU_sat: 8,  EU_neg: 7,  Ukraine_pos: 2, Russia_pos: 1 },
+      17:{ Ukraine_sat: 6,  Ukraine_neg: 9,  Russia_sat: 6,  Russia_neg: 8,  USA_sat: 8,  USA_neg: 8,  EU_sat: 8,  EU_neg: 8,  Ukraine_pos: 1, Russia_pos: 2 },
+      18:{ Ukraine_sat: 10, Ukraine_neg: 6,  Russia_sat: 2,  Russia_neg: 3,  USA_sat: 6,  USA_neg: 8,  EU_sat: 8,  EU_neg: 7,  Ukraine_pos: 1, Russia_pos: 0 },
+      19:{ Ukraine_sat: 10, Ukraine_neg: 3,  Russia_sat: 5,  Russia_neg: 7,  USA_sat: 8,  USA_neg: 8,  EU_sat: 9,  EU_neg: 6,  Ukraine_pos: 1, Russia_pos: 2 },
+      20:{ Ukraine_sat: 4,  Ukraine_neg: 5,  Russia_sat: 8,  Russia_neg: 7,  USA_sat: 7,  USA_neg: 7,  EU_sat: 5,  EU_neg: 6,  Ukraine_pos: 0, Russia_pos: 1 },
+    };
 
     /***************************************************************************
-     * 2. Icons for Ukraine/Russia positions: 1 => ✔, 0 => ✖, 2 => ✍ (or ?)
+     * 2. Icons for Ukraine/Russia positions: 1 => ✔, 0 => ✖, 2 => ?
      ***************************************************************************/
     function getColoredIcon(pos) {
       if (pos === 1) {
         return '<span style="color: #66cc66;">\u2713</span>'; // ✔
       } else if (pos === 2) {
-        return '<span style="color: #cccc00;">?</span>';      // Negotiable
+        return '<span style="color: #cccc00;">?</span>';      // ?
       } else if (pos === 0) {
         return '<span style="color: #ff6666;">\u00d7</span>'; // ✖
       }
@@ -418,77 +404,75 @@
     const thresholdValue = thresholdPercentage * maxSatisfaction; // e.g., 5
 
     const radarData = {
-  labels: ["Ukraine", "Russia", "USA", "Europe"],
-  datasets: [
-    {
-      label: "Satisfaction",
-      data: [0, 0, 0, 0],
-      backgroundColor: "rgba(10, 163, 97,0.2)",
-      borderColor: "rgba(10, 163, 97,1)",
-      pointBackgroundColor: "rgba(10, 163, 97,1)",
-      fill: true,
-      borderWidth: 0.4,
-      pointRadius: 0.7
-    },
-    {
-      label: "Negotiability",
-      data: [0, 0, 0, 0],
-      backgroundColor: "rgba(54,162,235,0.2)",
-      borderColor: "rgba(54,162,235,1)",
-      pointBackgroundColor: "rgba(54,162,235,1)",
-      fill: true,
-      borderWidth: 0.4,
-      pointRadius: 0.7
-    },
-    {
-      label: "Minimum Acceptable Threshold",
-      data: [3.40625, 4.6102, 1.9758, 2.0319],
-      borderColor: "red",
-      pointBackgroundColor: "red",
-      backgroundColor: "rgba(255,0,0,0)",
-      fill: false,
-      borderDash: [5, 5],
-      borderWidth: 0.7,
-      pointRadius: 0.5
-    }
-  ]
-};
-
-const radarChart = new Chart(document.getElementById('radarChart').getContext('2d'), {
-  type: 'radar',
-  data: radarData,
-  options: {
-    scales: {
-      r: {
-        min: 0,
-        max: 10,
-        ticks: {
-          beginAtZero: true,
-          stepSize: 1,
-          font: {
-            size: 8, // smaller font size for the tick labels
-            family: 'Roboto'
-          },
-          color: '#000000',
-          callback: function(value, index, values) {
-            // Only display labels for tick values 1, 4, 7, and 10
-            return [1, 4, 7, 10].includes(value) ? value : '';
-          }
+      labels: ["Ukraine", "Russia", "USA", "Europe"],
+      datasets: [
+        {
+          label: "Satisfaction",
+          data: [0, 0, 0, 0],
+          backgroundColor: "rgba(10, 163, 97,0.2)",
+          borderColor: "rgba(10, 163, 97,1)",
+          pointBackgroundColor: "rgba(10, 163, 97,1)",
+          fill: true,
+          borderWidth: 0.4,
+          pointRadius: 0.7
         },
-        pointLabels: {
-          font: {
-            size: 12,
-            family: 'Roboto',
-            style: 'bold'
-          },
-          color: '#000000'
+        {
+          label: "Negotiability",
+          data: [0, 0, 0, 0],
+          backgroundColor: "rgba(54,162,235,0.2)",
+          borderColor: "rgba(54,162,235,1)",
+          pointBackgroundColor: "rgba(54,162,235,1)",
+          fill: true,
+          borderWidth: 0.4,
+          pointRadius: 0.7
+        },
+        {
+          label: "Minimum Acceptable Threshold",
+          data: [5, 8, 3, 4], // Example thresholds for UA, RU, US, EU
+          borderColor: "red",
+          pointBackgroundColor: "red",
+          backgroundColor: "rgba(255,0,0,0)",
+          fill: false,
+          borderDash: [5, 5],
+          borderWidth: 0.7,
+          pointRadius: 0.5
+        }
+      ]
+    };
+
+    const radarChart = new Chart(document.getElementById('radarChart').getContext('2d'), {
+      type: 'radar',
+      data: radarData,
+      options: {
+        scales: {
+          r: {
+            min: 0,
+            max: 10,
+            ticks: {
+              beginAtZero: true,
+              stepSize: 1,
+              font: {
+                size: 8, // smaller font size for the tick labels
+                family: 'Roboto'
+              },
+              color: '#000000',
+              callback: function(value) {
+                // Only display labels for tick values 1, 4, 7, and 10
+                return [1, 4, 7, 10].includes(value) ? value : '';
+              }
+            },
+            pointLabels: {
+              font: {
+                size: 12,
+                family: 'Roboto',
+                style: 'bold'
+              },
+              color: '#000000'
+            }
+          }
         }
       }
-    }
-  }
-});
-
-
+    });
 
     /***************************************************************************
      * 4. Drag & Drop handling
@@ -531,9 +515,8 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
         if (origin === 'center') {
           moveArticleToLeft(articleId, section);
         }
-      } else if (dropZone === 'right') {
-        console.log("Dropped on the right column; no action set by default.");
       }
+      // 'right' dropZone not used
     }
 
     const leftColumn = document.getElementById("leftColumn");
@@ -577,18 +560,18 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
     });
 
     /***************************************************************************
-     * 6. Conflict rules
+     * 6. Conflict rules (still used if needed)
      ***************************************************************************/
     const conflictRules = {
-      1: [],
-      2: [3],
-      3: [2],
-      4: [],
-      5: [6],
-      6: [5],
-      7: [],
-      8: [10],
-      9: [],
+      1:  [],
+      2:  [3],
+      3:  [2],
+      4:  [],
+      5:  [6],
+      6:  [5],
+      7:  [],
+      8:  [10],
+      9:  [],
       10: [8],
       11: [],
       12: [13],
@@ -600,7 +583,6 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
       18: [],
       19: [],
       20: []
-      // Add more if needed
     };
 
     function checkConflicts(newArticleId) {
@@ -721,21 +703,21 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
         case 2:  return "2-Maintaining Russian control over all occupied territories as of 2025";
         case 3:  return "3-Maintaining Russian control over Zaporizhzhia and Kherson and territories occupied before 2022 (Crimea and parts of the DNR/LNR)";
         case 4:  return "4-Ensuring international recognition of occupied territories as Russian territory";
-        case 5:  return "5-Ukraine renouncing ambitions to join NATO";
+        case 5:  return "5-Ukraine renouncing its ambitions to join NATO";
         case 6:  return "6-Granting Ukraine NATO membership";
-        case 7:  return "7-Legally binding bilateral defense agreements between Ukraine and Western nations";
+        case 7:  return "7-Legally binding bilateral defense agreements between Western nations and Ukraine";
         case 8:  return "8-Imposing restrictions on Ukraine's military capabilities, including limits on troop numbers,  missile systems, and Western-supplied weapons";
-        case 9: return "9-Developing Ukrainian military-industrial complex and defense industry";
+        case 9:  return "9-Developing Ukrainian military-industrial complex and defense industry";
         case 10: return "10-Keeping Ukrainian Army self-sufficient and technologically advanced, fully interoperable with NATO";
         case 11: return "11-Considering peacekeeping forces, demilitarized zones to maintain post-conflict stability";
         case 12: return "12-Removal or easing of Western sanctions that have constrained Russia's economy";
         case 13: return "13-Keeping Western sanctions tight not to allow Russia rebuild its economy and improve miltech";
         case 14: return "14-Releasing Russian frozen assets, returning them to Russia";
         case 15: return "15-Using Russian frozen assets to rebuild Ukriane";
-        case 16: return "16-Using Ukraine’s gas transit infrastructure for European energy supplies from Russia";
+        case 16: return "16-Using Ukraine's gas transit infrastructure for European energy supplies from Russia";
         case 17: return "17-Allowing Western companies to use Ukrainain resources as raw materials";
         case 18: return "18-Demanding accountability for Russian war crimes, including trials for those responsible for atrocities and crimes against humanity";
-        case 19: return "19-Advocating for the safe return of forcibly deported Ukrainians, including  kidnapped children";
+        case 19: return "19- Advocating for the safe return of forcibly deported Ukrainians, including  kidnapped children";
         case 20: return "20-Having elections in Ukraine before peace/ceasefire settlement";
         default: return "";
       }
@@ -744,48 +726,157 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
     /***************************************************************************
      * 9. Recalc the chart => gather all articles in the center
      ***************************************************************************/
-    function recalcRadarChart() {
-      let selectedIds = [];
-      document.querySelectorAll(".treaty-section ul li").forEach((li) => {
-        const id = li.getAttribute("data-id");
-        if (id) selectedIds.push(parseInt(id, 10));
-      });
-      if (selectedIds.length === 0) {
-        radarChart.data.datasets[0].data = [0,0,0,0];
-        radarChart.data.datasets[1].data = [0,0,0,0];
-        radarChart.update();
-        return;
-      }
+    // function recalcRadarChart() {
+    //   let selectedIds = [];
+    //   document.querySelectorAll(".treaty-section ul li").forEach((li) => {
+    //     const id = li.getAttribute("data-id");
+    //     if (id) selectedIds.push(parseInt(id, 10));
+    //   });
+    //   if (selectedIds.length === 0) {
+    //     radarChart.data.datasets[0].data = [0,0,0,0];
+    //     radarChart.data.datasets[1].data = [0,0,0,0];
+    //     radarChart.update();
+    //     return;
+    //   }
 
-      let sumUkSat = 0, sumRuSat = 0, sumUsSat = 0, sumEuSat = 0;
-      let sumUkNeg = 0, sumRuNeg = 0, sumUsNeg = 0, sumEuNeg = 0;
-      selectedIds.forEach((id) => {
-        const info = articlesInfo[id];
-        if (!info) return;
-        sumUkSat += info.Ukraine_sat;
-        sumRuSat += info.Russia_sat;
-        sumUsSat += info.USA_sat;
-        sumEuSat += info.EU_sat;
-        sumUkNeg += info.Ukraine_neg;
-        sumRuNeg += info.Russia_neg;
-        sumUsNeg += info.USA_neg;
-        sumEuNeg += info.EU_neg;
-      });
-      const count = selectedIds.length;
-      radarChart.data.datasets[0].data = [
-        sumUkSat/count,
-        sumRuSat/count,
-        sumUsSat/count,
-        sumEuSat/count
-      ];
-      radarChart.data.datasets[1].data = [
-        sumUkNeg/count,
-        sumRuNeg/count,
-        sumUsNeg/count,
-        sumEuNeg/count
-      ];
-      radarChart.update();
+    //   let sumUkSat = 0, sumRuSat = 0, sumUsSat = 0, sumEuSat = 0;
+    //   let sumUkNeg = 0, sumRuNeg = 0, sumUsNeg = 0, sumEuNeg = 0;
+    //   selectedIds.forEach((id) => {
+    //     const info = articlesInfo[id];
+    //     if (!info) return;
+    //     sumUkSat += info.Ukraine_sat;
+    //     sumRuSat += info.Russia_sat;
+    //     sumUsSat += info.USA_sat;
+    //     sumEuSat += info.EU_sat;
+    //     sumUkNeg += info.Ukraine_neg;
+    //     sumRuNeg += info.Russia_neg;
+    //     sumUsNeg += info.USA_neg;
+    //     sumEuNeg += info.EU_neg;
+    //   });
+    //   const count = selectedIds.length;
+    //   radarChart.data.datasets[0].data = [
+    //     sumUkSat/count,
+    //     sumRuSat/count,
+    //     sumUsSat/count,
+    //     sumEuSat/count
+    //   ];
+    //   radarChart.data.datasets[1].data = [
+    //     sumUkNeg/count,
+    //     sumRuNeg/count,
+    //     sumUsNeg/count,
+    //     sumEuNeg/count
+    //   ];
+    //   radarChart.update();
+    // }
+
+
+    function recalcRadarChart() {
+  const selectedIds = [];
+  document.querySelectorAll(".treaty-section ul li").forEach((li) => {
+    const idStr = li.getAttribute("data-id");
+    if (idStr) selectedIds.push(parseInt(idStr, 10));
+  });
+
+  // If no articles, set all to zero
+  if (selectedIds.length === 0) {
+    radarChart.data.datasets[0].data = [0, 0, 0, 0]; // satisfaction
+    radarChart.data.datasets[1].data = [0, 0, 0, 0]; // negotiability
+    radarChart.update();
+    return;
+  }
+
+  // Prepare arrays to gather satisfaction and negotiability
+  // ... plus arrays for storing "opposed" items for UA/RU
+  let uaSatSum = 0, ruSatSum = 0, usSatSum = 0, euSatSum = 0;
+  let uaNegSum = 0, ruNegSum = 0, usNegSum = 0, euNegSum = 0;
+  let uaCount = 0, ruCount = 0, usCount = selectedIds.length, euCount = selectedIds.length;
+
+  // We'll store the "opposed" satisfaction values (pos=0) for each side
+  const opposedUaSats = []; 
+  const opposedRuSats = [];
+
+  // Loop over each selected ID
+  selectedIds.forEach((id) => {
+    const info = articlesInfo[id];
+    if (!info) return;
+
+    // (1) Check if Ukraine opposes (pos=0)
+    if (info.Ukraine_pos === 0) {
+      opposedUaSats.push(info.Ukraine_sat);
+    } else {
+      // If not opposed, we add this to UA's sum
+      uaSatSum += info.Ukraine_sat;
+      uaCount++;
     }
+
+    // (2) Check if Russia opposes (pos=0)
+    if (info.Russia_pos === 0) {
+      opposedRuSats.push(info.Russia_sat);
+    } else {
+      ruSatSum += info.Russia_sat;
+      ruCount++;
+    }
+
+    // (3) US/EU do not have pos=0 in your data, so just average them normally
+    usSatSum += info.USA_sat;
+    euSatSum += info.EU_sat;
+
+    // (4) Negotiability always summed/averaged
+    uaNegSum += info.Ukraine_neg;
+    ruNegSum += info.Russia_neg;
+    usNegSum += info.USA_neg;
+    euNegSum += info.EU_neg;
+  });
+
+  // === Compute the final satisfaction for each side ===
+  // Ukraine's satisfaction:
+  let finalUaSat = 0;
+  if (opposedUaSats.length > 0) {
+    // If Ukraine opposes ANY item, pick the minimum among them:
+    // e.g. if there's opposed items with UA_sat=2 and UA_sat=3,
+    // finalUaSat = 2 (can't go up just by adding a "less opposed" item)
+    finalUaSat = Math.min(...opposedUaSats);
+  } else {
+    // If no opposed items, average over the items UA doesn't oppose
+    finalUaSat = (uaCount > 0) ? (uaSatSum / uaCount) : 0;
+  }
+
+  // Russia's satisfaction:
+  let finalRuSat = 0;
+  if (opposedRuSats.length > 0) {
+    finalRuSat = Math.min(...opposedRuSats);
+  } else {
+    finalRuSat = (ruCount > 0) ? (ruSatSum / ruCount) : 0;
+  }
+
+  // For US/EU, no pos=0 logic, so standard average over all selected
+  // (If you want them to skip opposed items or do something else, adapt similarly)
+  const finalUsSat = (selectedIds.length > 0) ? (usSatSum / selectedIds.length) : 0;
+  const finalEuSat = (selectedIds.length > 0) ? (euSatSum / selectedIds.length) : 0;
+
+  // === Compute negotiability (just average them) ===
+  const count = selectedIds.length;
+  const finalUaNeg = uaNegSum / count;
+  const finalRuNeg = ruNegSum / count;
+  const finalUsNeg = usNegSum / count;
+  const finalEuNeg = euNegSum / count;
+
+  // === Update chart ===
+  radarChart.data.datasets[0].data = [
+    finalUaSat,
+    finalRuSat,
+    finalUsSat,
+    finalEuSat
+  ];
+  radarChart.data.datasets[1].data = [
+    finalUaNeg,
+    finalRuNeg,
+    finalUsNeg,
+    finalEuNeg
+  ];
+
+  radarChart.update();
+}
 
     /***************************************************************************
      * 10. Presets for quick loading
@@ -807,7 +898,8 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
         territorial: [3, 5],
         security:    [7, 9],
         economic:    [16, 14, 18],
-        justice:     [20, 21]
+        // there's a small bug: referencing "21" doesn't exist in articlesInfo
+        justice:     [20]
       }
     };
 
@@ -819,7 +911,6 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
         moveArticleToLeft(articleId, section, li);
       });
     }
-
     function loadPreset(presetNumber) {
       clearCenter();
       const preset = presets[presetNumber];
@@ -832,14 +923,31 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
       }
     }
 
+    // NEW function: "Start Again" resets the center column
+    function startAgain() {
+      clearCenter();
+      // We also remove highlight from any leftover items, if needed
+      document.querySelectorAll(".highlight-negotiation").forEach(li => {
+        li.classList.remove("highlight-negotiation");
+      });
+      recalcRadarChart();
+    }
+
     // Initial chart update
     recalcRadarChart();
 
     /***************************************************************************
-     * 11. Optimize Draft logic
+     * 11. Revised "Optimize Draft" algorithm
+     *
+     *   1) Identify side with lower satisfaction (tie => Ukraine).
+     *   2) totalCount = # articles in center. limitCount = floor(50% of totalCount).
+     *   3) recommended[] = all articles from that side with pos=2 (negotiable).
+     *   4) If recommended.length < limitCount, we fill from items with
+     *      the highest (Ukraine_neg + Russia_neg), ignoring any already in recommended.
+     *      (Optionally, also exclude any items that have pos=0 for the chosen side.)
+     *   5) We highlight exactly up to limitCount items, in .highlight-negotiation.
      ***************************************************************************/
 
-    // Get all articles currently in the center
     function getCenterArticles() {
       const ids = [];
       document.querySelectorAll(".treaty-section ul li").forEach((li) => {
@@ -849,257 +957,108 @@ const radarChart = new Chart(document.getElementById('radarChart').getContext('2
       return ids;
     }
 
-    // Compute each stakeholder's average satisfaction
     function getStakeholdersData() {
       const centerIds = getCenterArticles();
-      let sumUkSat=0, sumRuSat=0, sumUsSat=0, sumEuSat=0;
+      let sumUkSat = 0, sumRuSat = 0;
       const count = centerIds.length;
       centerIds.forEach((id) => {
         const info = articlesInfo[id];
         if (info) {
           sumUkSat += info.Ukraine_sat;
           sumRuSat += info.Russia_sat;
-          sumUsSat += info.USA_sat;
-          sumEuSat += info.EU_sat;
         }
       });
-      return [
-        { name: "Ukraine", sat: count ? sumUkSat / count : 0 },
-        { name: "Russia",  sat: count ? sumRuSat / count : 0 },
-        { name: "USA",     sat: count ? sumUsSat / count : 0 },
-        { name: "Europe",  sat: count ? sumEuSat / count : 0 }
-      ];
-    }
-
-    // Identify which stakeholder is below threshold or has the absolute lowest
-    function findLowestStakeholder() {
-      const data = getStakeholdersData();
-      if (!data.length) return {};
-
-      // 1) Check if Ukraine or Russia is below threshold
-      let below = data.filter(d => 
-        (d.name === "Ukraine" || d.name === "Russia") && d.sat < thresholdValue
-      );
-      if (below.length) {
-        below.sort((a,b) => a.sat - b.sat);
-        return { lowestStakeholder: below[0].name };
-      }
-      // 2) Then check if US or EU is below threshold
-      below = data.filter(d => 
-        (d.name === "USA" || d.name === "Europe") && d.sat < thresholdValue
-      );
-      if (below.length) {
-        below.sort((a,b) => a.sat - b.sat);
-        return { lowestStakeholder: below[0].name };
-      }
-      // 3) If none are below threshold, pick the absolute lowest with priority UA/RU
-      data.sort((a,b) => a.sat - b.sat);
-      let candidate = data.find(d => (d.name === "Ukraine" || d.name === "Russia"))
-                    || data[0];
-      return { lowestStakeholder: candidate.name };
-    }
-
-    // Among the other 3 stakeholders, pick one with highest satisfaction
-    function findHighestSatisfactionStakeholder(excludeName) {
-      const data = getStakeholdersData().filter(d => d.name !== excludeName);
-      if (!data.length) return null;
-      data.sort((a,b) => b.sat - a.sat);
-
-      // "less important first (US, EU)"
-      const americansOrEuropeans = data.filter(d => d.name === "USA" || d.name === "Europe");
-      if (americansOrEuropeans.length) {
-        americansOrEuropeans.sort((a,b) => b.sat - a.sat);
-        return americansOrEuropeans[0].name;
-      }
-      // Otherwise pick the top from entire array
-      return data[0].name;
-    }
-
-    // -------------- GLOBAL FUNCTION --------------
-    // Moves highlight-negotiation items from center into Negotiability Frame
-    function moveNegotiableItemsToFrame() {
-      const negotiabilityFrame = document.querySelector("#negotiabilityFrame ul");
-      const negotiableItems = document.querySelectorAll(".treaty-section ul li.highlight-negotiation");
-
-      negotiableItems.forEach(li => {
-        // Remove from current parent
-        li.parentElement.removeChild(li);
-        // Optionally style them in the frame
-        li.style.color = "orange";
-        // Move them into the negotiability frame
-        negotiabilityFrame.appendChild(li);
-      });
-    }
-
-
-    // Clear center and negotiability area
-
-function clearNegotiabilityFrame() {
-  const negFrameUL = document.querySelector("#negotiabilityFrame ul");
-  if (negFrameUL) {
-    // Convert NodeList to an array so we can iterate safely
-    Array.from(negFrameUL.children).forEach(li => {
-      const articleId = li.getAttribute("data-id");
-      const section = li.getAttribute("data-section");
-      // Move the item back to the left column
-      moveArticleToLeft(articleId, section, li);
-    });
-  }
-}
-
-function clearCenter() {
-  // First, move items from the negotiability frame back to the left column
-  clearNegotiabilityFrame();
-  
-  // Then move any remaining items in treaty sections back to the left column
-  document.querySelectorAll(".treaty-section ul li").forEach((li) => {
-    const articleId = li.getAttribute("data-id");
-    const parentSectionId = li.closest(".treaty-section").id;
-    const section = parentSectionId.replace("treaty-", "");
-    moveArticleToLeft(articleId, section, li);
-  });
-}
-
-// Event listener for negotiability frame items to allow moving back
-const negotiabilityFrameUL = document.querySelector("#negotiabilityFrame ul");
-if (negotiabilityFrameUL) {
-  negotiabilityFrameUL.addEventListener("click", (event) => {
-    const li = event.target.closest("li");
-    if (li && li.hasAttribute("data-id")) {
-      const articleId = li.getAttribute("data-id");
-      const section = li.getAttribute("data-section");
-      moveArticleToLeft(articleId, section, li);
-    }
-  });
-}
-
-// Moves negotiable items from treaty sections into the negotiability frame
-function moveNegotiableItemsToFrame() {
-  const negotiabilityFrame = document.querySelector("#negotiabilityFrame ul");
-  const negotiableItems = document.querySelectorAll(".treaty-section ul li.highlight-negotiation");
-  negotiableItems.forEach(li => {
-    li.parentElement.removeChild(li);
-    li.style.color = "orange";
-    negotiabilityFrame.appendChild(li);
-  });
-}
-
-
-    // Reorder items for a given "donor" stakeholder
-    function reorderAndHighlightNegotiationItems(donorName) {
-      const centerLis = document.querySelectorAll(".treaty-section ul li");
-      const itemArray = [];
-
-      // For flip animation (optional)
-      const oldRects = new Map();
-      centerLis.forEach(li => {
-        const rect = li.getBoundingClientRect();
-        oldRects.set(li, rect);
-      });
-
-      centerLis.forEach(li => {
-        const idStr = li.getAttribute("data-id");
-        if (!idStr) return;
-        const id = parseInt(idStr, 10);
-        const catSection = li.closest(".treaty-section").id.replace("treaty-", "");
-        if (!articlesInfo[id]) return;
-
-        let donorPos = 0;
-        switch(donorName) {
-          case "Ukraine": donorPos = articlesInfo[id].Ukraine_pos; break;
-          case "Russia":  donorPos = articlesInfo[id].Russia_pos;  break;
-          case "USA":     donorPos = 2; // For example treat as negotiable
-            break;
-          case "Europe":  donorPos = 2;
-            break;
-        }
-        itemArray.push({
-          liElement: li,
-          articleId: id,
-          position: donorPos,
-          catSection
-        });
-      });
-
-      // Sort so that negotiable items (pos=2) appear first
-      function priority(pos) {
-        // Lower number => higher priority
-        return (pos === 2) ? 1 : (pos === 1 ? 2 : 3);
-      }
-      itemArray.sort((a, b) => priority(a.position) - priority(b.position));
-
-      // Re-insert them in the original category UL in sorted order
-      const sectionsMap = {};
-      itemArray.forEach(item => {
-        if (!sectionsMap[item.catSection]) {
-          sectionsMap[item.catSection] = [];
-        }
-        sectionsMap[item.catSection].push(item);
-      });
-
-      for (let cat in sectionsMap) {
-        const sortedItems = sectionsMap[cat];
-        const parentUl = document.querySelector(`#treaty-${cat} ul`);
-        if (!parentUl) continue;
-        // Insert from first (top) to last
-        sortedItems.forEach(obj => {
-          parentUl.insertBefore(obj.liElement, parentUl.firstChild);
-        });
-      }
-
-      // Highlight items that are "negotiable" for that donor (pos=2)
-      itemArray.forEach(item => {
-        if (item.position === 2) {
-          item.liElement.classList.add("highlight-negotiation");
-        } else {
-          item.liElement.classList.remove("highlight-negotiation");
-          item.liElement.style.color = "";
-        }
-      });
-
-      // FLIP animation
-      itemArray.forEach(item => {
-        const li = item.liElement;
-        const newRect = li.getBoundingClientRect();
-        const oldRect = oldRects.get(li);
-        const deltaX = oldRect.left - newRect.left;
-        const deltaY = oldRect.top - newRect.top;
-        li.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-        li.style.transition = 'none';
-        requestAnimationFrame(() => {
-          li.style.transition = 'transform 0.3s ease-out';
-          li.style.transform = '';
-        });
-      });
+      return {
+        UkraineAvg: count ? sumUkSat / count : 0,
+        RussiaAvg:  count ? sumRuSat / count : 0
+      };
     }
 
     function optimizeDraft() {
-      // 1) find stakeholder with lowest satisfaction
-      const {lowestStakeholder} = findLowestStakeholder();
+      // 1) Determine which side has lower satisfaction
+      const { UkraineAvg, RussiaAvg } = getStakeholdersData();
+      if (UkraineAvg === 0 && RussiaAvg === 0) {
+        showErrorMessage("No articles in the draft to optimize.");
+        return;
+      }
+      let selectedSide = "Ukraine";
+      if (RussiaAvg < UkraineAvg) {
+        selectedSide = "Russia";
+      }
+      // If tie => Ukraine
+
+      // 2) Gather center articles
       const centerIds = getCenterArticles();
-      if (!lowestStakeholder || !centerIds.length) {
-        showErrorMessage("No articles or no stakeholder found to optimize.");
+      const totalCount = centerIds.length;
+      const limitCount = Math.floor(totalCount * 0.5);
+      if (limitCount < 1) {
+        showErrorMessage("Not enough articles in the draft to recommend 50%.");
         return;
       }
 
-      // 2) find a stakeholder with highest satisfaction who can yield
-      const donorStakeholder = findHighestSatisfactionStakeholder(lowestStakeholder);
-      if (!donorStakeholder) {
-        showErrorMessage("No stakeholder found with high satisfaction.");
-        return;
+      let posField, negField;
+      if (selectedSide === "Ukraine") {
+        posField = "Ukraine_pos";
+        negField = "Ukraine_neg";
+      } else {
+        posField = "Russia_pos";
+        negField = "Russia_neg";
       }
 
-      // 3) reorder & highlight items from donor
-      reorderAndHighlightNegotiationItems(donorStakeholder);
+      // Start building recommended array
+      // Step A: All center items for which side's pos != 0 (we skip items that side strongly opposes).
+      const centerItems = centerIds.map(id => ({
+        id,
+        posUA: articlesInfo[id].Ukraine_pos,
+        posRU: articlesInfo[id].Russia_pos,
+        negUA: articlesInfo[id].Ukraine_neg,
+        negRU: articlesInfo[id].Russia_neg
+      }));
+      // Filter out items that have pos=0 for the chosen side
+      const sideFiltered = centerItems.filter(obj => {
+        return selectedSide === "Ukraine"
+          ? (obj.posUA !== 0)
+          : (obj.posRU !== 0);
+      });
 
-      // 4) physically move any highlighted items to the negotiability frame
-      moveNegotiableItemsToFrame();
+      // Step B: from sideFiltered, pick those with pos=2 first
+      let recommended = sideFiltered.filter(obj => {
+        return selectedSide === "Ukraine"
+          ? (obj.posUA === 2)
+          : (obj.posRU === 2);
+      });
 
-      // 5) recalc chart
+      // Step C: If recommended still less than limitCount, fill from items with highest (UA_neg + RU_neg)
+      if (recommended.length < limitCount) {
+        // remaining pool is sideFiltered, excluding already recommended
+        const recommendedIds = new Set(recommended.map(r => r.id));
+        const remainingPool = sideFiltered.filter(obj => !recommendedIds.has(obj.id));
+        
+        // sort by sum(negUA + negRU) descending
+        remainingPool.sort((a, b) => (b.negUA + b.negRU) - (a.negUA + a.negRU));
+        
+        for (let i=0; i<remainingPool.length && recommended.length < limitCount; i++) {
+          recommended.push(remainingPool[i]);
+        }
+      }
+
+      // 3) If recommended > limitCount, we can slice (though typically we won't exceed)
+      // recommended = recommended.slice(0, limitCount);
+
+      // 4) Unhighlight everything, then highlight recommended
+      document.querySelectorAll(".treaty-section ul li").forEach(li => {
+        li.classList.remove("highlight-negotiation");
+      });
+      recommended.forEach(item => {
+        const li = document.querySelector(`.treaty-section ul li[data-id="${item.id}"]`);
+        if (li) {
+          li.classList.add("highlight-negotiation");
+        }
+      });
+
+      // 5) Update chart (optional)
       recalcRadarChart();
-      //showErrorMessage(`Reordered items from ${donorStakeholder} to help ${lowestStakeholder}.`);
     }
-    
   </script>
 
 </body>
