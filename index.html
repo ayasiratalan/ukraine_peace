@@ -32,7 +32,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       border-radius: 8px;
       display: flex;
-      flex-direction: row;
+      flex-direction: row; /* default: side by side in large screens */
       gap: 1rem;
     }
 
@@ -89,7 +89,7 @@
       font-weight: 500;
     }
     .treaty-section h3 {
-      background-color: #f0f8ff;
+      background-color: #e8efff;
       border-left: 4px solid #007bff;
       padding: 0.5rem;
       margin: 1rem 0 0.5rem 0;
@@ -206,12 +206,58 @@
     #instructions h1, #instructions h2 {
       text-align: center;
     }
+
+    /* ------------------------------------
+       RESPONSIVE ADAPTATION FOR SMALL SCREENS
+       ------------------------------------ */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column; /* Stack columns vertically */
+      }
+
+      /* Remove or reduce column-based styling so they become full-width blocks */
+      #leftColumn,
+      #centerColumn,
+      #rightColumn {
+        min-width: auto;
+        width: 100%;
+        margin-bottom: 1rem;
+        border: none; /* remove the left/right borders for a cleaner stacked view */
+        box-shadow: none; /* optional: remove or reduce shadow on mobile */
+      }
+
+      #centerColumn {
+        box-shadow: 0 0 22px rgba(0,0,0,0.25); /* you can keep a more prominent shadow if desired */
+      }
+
+      /* Adjust font sizes a bit on smaller screens (optional) */
+      h1 {
+        font-size: 1.3rem;
+      }
+      h2 {
+        font-size: 1rem;
+      }
+      h3 {
+        font-size: 1rem;
+      }
+
+      button {
+        font-size: 0.9rem;
+        padding: 0.65rem 1rem;
+      }
+
+      li {
+        margin: 0.4rem 0;
+        padding: 0.6rem;
+      }
+    }
   </style>
 </head>
 <body>
 
+
 <div id="instructions"> 
-  <h1>Peace Agreement Negotiation Tool</h1>
+  <h1>Peace Agreement Negotiation Simulator</h1>
   <h2>Instructions</h2>
   <p>
     The radar chart serves as a visualization tool for assessing the viability of potential peace agreements between Ukraine and Russia. The chart can help negotiators identify which combinations of agreement items might achieve a workable balance that keeps all parties above their minimum requirements while maximizing areas of mutual satisfaction.
@@ -889,7 +935,7 @@
       const totalCount = centerIds.length;
       const limitCount = Math.floor(totalCount * 0.5);
       if (limitCount < 1) {
-        showErrorMessage("Not enough articles in the draft to recommend 50%.");
+        showErrorMessage("Not enough articles in the draft.");
         return;
       }
 
