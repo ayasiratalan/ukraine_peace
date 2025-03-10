@@ -269,9 +269,9 @@
     The most promising paths to agreement appear where multiple parties show both above-threshold satisfaction and meaningful negotiability scores. Negotiators should focus on these overlapping zones of flexibility while ensuring no party's overall satisfaction drops below their minimum acceptable threshold, as this would likely cause them to abandon talks. By balancing these metrics, negotiators can identify which combinations of agreement items offer the best chance of achieving a stable agreement.
   </p>
   <div style="text-align: center;">
-    <button onclick="loadPreset(1)">Preset 1</button>
-    <button onclick="loadPreset(2)">Preset 2</button>
-    <button onclick="loadPreset(3)">Preset 3</button>
+    <button onclick="loadPreset(1)">Balanced Settlement</button>
+    <button onclick="loadPreset(2)">Pro-Russia Settlement</button>
+    <button onclick="loadPreset(3)">Pro-Ukraine Settlement</button>
     <br>
     <!-- Start Again button with a different style -->
     <button class="start-again-btn" onclick="startAgain()">Start Again</button>
@@ -478,7 +478,7 @@
         },
         {
           label: "Minimum Acceptable Threshold",
-          data: [5, 8, 3, 4], // Example thresholds for UA, RU, US, EU
+          data: [5, 6.5, 3, 4], // Example thresholds for UA, RU, US, EU
           borderColor: "red",
           pointBackgroundColor: "red",
           backgroundColor: "rgba(255,0,0,0)",
@@ -826,22 +826,21 @@
      ***************************************************************************/
     const presets = {
       1: {
-        territorial: [1, 4],
-        security:    [6, 10, 11],
-        economic:    [13, 16],
-        justice:     [19, 20]
+        territorial: [1, 2],
+        security:    [5, 7, 11],
+        economic:    [12, 15,17],
+        justice:     [19]
       },
       2: {
-        territorial: [3],
-        security:    [6, 8, 12],
-        economic:    [14, 17, 16],
+        territorial: [1,2],
+        security:    [5, 8,],
+        economic:    [14, 16, 17],
         justice:     [19, 20]
       },
       3: {
         territorial: [3, 5],
-        security:    [7, 9],
-        economic:    [16, 14, 18],
-        // there's a small bug: referencing "21" doesn't exist in articlesInfo
+        security:    [7, 9,10,11],
+        economic:    [12, 15, 16],
         justice:     [20]
       }
     };
