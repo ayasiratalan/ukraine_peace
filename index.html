@@ -50,10 +50,11 @@
       margin: 0;
       padding: 0;
       font-family: 'Publico', serif;
-      font-size: 1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
       background-color: #f7f8fa; /* very light gray */
       color: #333;
-      line-height: 1.6;
+      line-height: 1;
     }
     /* ---------------------------
        Column Layout
@@ -95,6 +96,19 @@
       font-size: 1.1rem;
       margin-bottom: 0.5rem;
     }
+    .fancy-title {
+  /* Bump up the size and boldness */
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  /* Gradient text technique */
+  background: linear-gradient(90deg, #1f548e 0%, #145e9b 50%, #1d65c4 100%);
+  -webkit-background-clip: text;  /* makes the gradient apply to the text */
+  -webkit-text-fill-color: transparent; /* hide the solid text color */
+  /* Optional: subtle text shadow */
+  text-shadow: 0 0px 1px rgba(0, 0, 0, 0.25);
+}
 
     /* ---------------------------
        Subheader Enhancements
@@ -141,7 +155,7 @@
 
 .step-box {
   flex: 1;
-  border: 2px solid #007bff;
+  border: 2px solid #004085;
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -156,7 +170,7 @@
 .step-number {
   width: 30px;
   height: 30px;
-  background-color: #007bff;
+  background-color: #185aa0;
   color: #fff;
   font-weight: bold;
   text-align: center;
@@ -173,20 +187,20 @@
       padding: 0.75rem 1.5rem;
       font-family: 'Publico', serif;
       font-size: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       border-radius: 6px;
       border: none;
       cursor: pointer;
-      background-color: #2379d4;
+      background-color: #185aa0;
       color: #fff;
       transition: background-color 0.5s ease, box-shadow 0.5s ease;
     }
     button:hover {
-      background-color: #0069d9;
+      background-color: #185aa0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     button:active {
-      background-color: #005cbf;
+      background-color: #185aa0;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
     }
     /* New style for Start Again button */
@@ -250,7 +264,7 @@
        Highlight Class
        --------------------------- */
     .highlight-negotiation {
-      background-color: #ffdea5 !important; /* light yellow */
+      background-color: #f7f4a6 !important; /* light yellow */
       border: 2px solid #ffcc00 !important; /* orange border */
     }
 
@@ -302,6 +316,15 @@
         margin: 0.4rem 0;
         padding: 0.6rem;
       }
+      .step-container {
+    flex-direction: column;
+    align-items: stretch; /* Let them fill the width */
+  }
+  
+  .step-box {
+    margin-bottom: 1rem;
+  }
+
     }
   </style>
 </head>
@@ -309,7 +332,7 @@
 
 
   <div id="instructions">
-    <h1>Ukraine-Russia Peace Talks Simulator</h1>
+    <h1 class="fancy-title">Ukraine-Russia Peace Agreement Simulator</h1>
   
     <!-- Three-Step Instruction Boxes -->
     <div class="step-container">
@@ -321,11 +344,11 @@
           <h2>Building the Draft Agreement</h2>
         </div>
         <p>
-          The panel “Available Negotiation Items” contains 20 negotiation items divided into 4 categories.
-          To start drafting a peace agreement, select or drag items into the Draft Agreement Panel in the center.
+          The panel “Available Negotiation Articles” contains 20 negotiation items divided into 4 categories.
+          To start drafting a peace agreement, select or drag items into the “Peace Agreement Draft" panel in the center.
         </p>
         <p>
-          As items are added to the Draft Agreement Panel, stakeholders’ positions are displayed below each
+          As items are added to the “Peace Agreement Draft” panel, stakeholders’ positions are displayed below each
           item using indicators: green checkmarks (support), red crosses (opposition), and yellow question marks
           (willingness to negotiate).
         </p>
@@ -338,8 +361,8 @@
           <h2>Analyzing the Agreement</h2>
         </div>
         <p>
-          The Analysis Panel visualizes and tracks satisfaction levels (green), negotiability scores (blue), 
-          and minimum acceptable thresholds (red line) for Ukraine, Russia, the USA, and the EU.
+          The “Negotiation Analysis” panel visualizes and tracks satisfaction (green), negotiability (blue) scores, 
+          and minimum acceptable threshold (red line) for Ukraine, Russia, the USA, and the Europe.
         </p>
         <p>
           Aim to maintain all stakeholder satisfaction above the red threshold to avoid failed negotiations.
@@ -360,11 +383,12 @@
           The tool will highlight items in yellow that offer the best potential for enhancing agreement stability.
         </p>
         <p>
-          Experiment with substituting items in the Draft Agreement Panel, prioritizing combinations that 
-          maintain satisfaction above critical thresholds while maximizing negotiation flexibility.
+          Experiment with substituting items in the “Peace Agreement Draft” panel, prioritizing combinations that 
+          maintain satisfaction above critical threshold while maximizing negotiation flexibility.
         </p>
       </div>
     </div>
+    <div style="text-align: center;"> See below examples of possible peace agreement drafts: </div>
   <div style="text-align: center;">
     <button onclick="loadPreset(1)">Balanced Settlement</button>
     <button onclick="loadPreset(2)">Pro-Russia Settlement</button>
