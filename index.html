@@ -4,20 +4,30 @@
   <meta charset="UTF-8">
   <title>Modern Peace Agreement Dashboard</title>
   <!-- Import Google Fonts: Roboto -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> -->
+    <style>
+    @font-face {
+      font-family: 'Publico';
+      src: url('fonts/Publico-Regular.woff2') format('woff2'),
+           url('fonts/Publico-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Publico';
+      src: url('fonts/Publico-Bold.woff2') format('woff2'),
+           url('fonts/Publico-Bold.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+    }
+  </style>
+  
   <style>
     /* ---------------------------
        Modern Global Styles
-       --------------------------- */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      font-size: 0.9rem;
-      background-color: #f7f8fa; /* very light gray */
-      color: #333;
-      line-height: 1.6;
-    }
+
+   
+  
 
     /* Removed negotiability-frame styling */
 
@@ -36,6 +46,15 @@
       gap: 1rem;
     }
 
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Publico', serif;
+      font-size: 1rem;
+      background-color: #f7f8fa; /* very light gray */
+      color: #333;
+      line-height: 1.6;
+    }
     /* ---------------------------
        Column Layout
        --------------------------- */
@@ -113,6 +132,38 @@
     #instructions p {
       margin-bottom: 1rem;
     }
+    .step-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-around; /* or 'space-between' */
+  margin-bottom: 1rem;
+}
+
+.step-box {
+  flex: 1;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.step-number {
+  width: 30px;
+  height: 30px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
 
     /* ---------------------------
        Modern Buttons
@@ -120,12 +171,13 @@
     button {
       margin: 0.5rem;
       padding: 0.75rem 1.5rem;
+      font-family: 'Publico', serif;
       font-size: 1rem;
       font-weight: 500;
       border-radius: 6px;
       border: none;
       cursor: pointer;
-      background-color: #2a6db6;
+      background-color: #2379d4;
       color: #fff;
       transition: background-color 0.5s ease, box-shadow 0.5s ease;
     }
@@ -256,18 +308,63 @@
 <body>
 
 
-<div id="instructions"> 
-  <h1>Peace Agreement Negotiation Simulator</h1>
-  <h2>Instructions</h2>
-  <p>
-    The radar chart serves as a visualization tool for assessing the viability of potential peace agreements between Ukraine and Russia. The chart can help negotiators identify which combinations of agreement items might achieve a workable balance that keeps all parties above their minimum requirements while maximizing areas of mutual satisfaction.
-  </p>
-  <p>
-    When analyzing the chart, examine the relationship between satisfaction levels and negotiability scores for each stakeholder. High negotiability paired with moderate satisfaction suggests areas where parties have flexibility to make concessions, while low negotiability combined with high satisfaction often indicates core non-negotiable positions. For instance, if Russia shows high satisfaction but low negotiability, this suggests a hard line position, whereas Ukraine might show moderate satisfaction and higher negotiability, indicating room for compromise.
-  </p>
-  <p>
-    The most promising paths to agreement appear where multiple parties show both above-threshold satisfaction and meaningful negotiability scores. Negotiators should focus on these overlapping zones of flexibility while ensuring no party's overall satisfaction drops below their minimum acceptable threshold, as this would likely cause them to abandon talks. By balancing these metrics, negotiators can identify which combinations of agreement items offer the best chance of achieving a stable agreement.
-  </p>
+  <div id="instructions">
+    <h1>Ukraine-Russia Peace Talks Simulator</h1>
+  
+    <!-- Three-Step Instruction Boxes -->
+    <div class="step-container">
+      
+      <!-- Step 1 -->
+      <div class="step-box">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <h2>Building the Draft Agreement</h2>
+        </div>
+        <p>
+          The panel “Available Negotiation Items” contains 20 negotiation items divided into 4 categories.
+          To start drafting a peace agreement, select or drag items into the Draft Agreement Panel in the center.
+        </p>
+        <p>
+          As items are added to the Draft Agreement Panel, stakeholders’ positions are displayed below each
+          item using indicators: green checkmarks (support), red crosses (opposition), and yellow question marks
+          (willingness to negotiate).
+        </p>
+      </div>
+  
+      <!-- Step 2 -->
+      <div class="step-box">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <h2>Analyzing the Agreement</h2>
+        </div>
+        <p>
+          The Analysis Panel visualizes and tracks satisfaction levels (green), negotiability scores (blue), 
+          and minimum acceptable thresholds (red line) for Ukraine, Russia, the USA, and the EU.
+        </p>
+        <p>
+          Aim to maintain all stakeholder satisfaction above the red threshold to avoid failed negotiations.
+          Identify promising negotiation paths by focusing on areas where stakeholders show both acceptable
+          satisfaction and high negotiability.
+        </p>
+      </div>
+  
+      <!-- Step 3 -->
+      <div class="step-box">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <h2>Optimizing the Agreement</h2>
+        </div>
+        <p>
+          If stakeholder satisfaction drops below the minimum threshold or improvement is needed, use
+          the optimization feature. Click the “Optimize Draft” button below the radar chart.
+          The tool will highlight items in yellow that offer the best potential for enhancing agreement stability.
+        </p>
+        <p>
+          Experiment with substituting items in the Draft Agreement Panel, prioritizing combinations that 
+          maintain satisfaction above critical thresholds while maximizing negotiation flexibility.
+        </p>
+      </div>
+    </div>
   <div style="text-align: center;">
     <button onclick="loadPreset(1)">Balanced Settlement</button>
     <button onclick="loadPreset(2)">Pro-Russia Settlement</button>
@@ -285,7 +382,7 @@
   <div class="container">
     <!-- LEFT COLUMN: Available Articles -->
     <div id="leftColumn">
-      <h1>Available Negotiation Articles</h1>
+      <h1 style="text-align: center;">Available Negotiation Articles</h1>
 
       <!-- Territory and Sovereignty -->
       <div class="section-block">
@@ -341,7 +438,7 @@
       <div class="official-doc">
         <!-- Error Message Container -->
         <div id="errorMessage" style="display:none; margin-bottom:1rem; padding:0.75rem; background-color:#ffe6e6; border:1px solid #ff8888; text-align:center;"></div>
-        <h1>Ukraine-Russia Peace Agreement Draft</h1>
+        <h1 style="text-align: center;">Peace Agreement Draft</h1>
 
         <!-- Treaty Sections -->
         <div class="treaty-section" id="treaty-territorial">
@@ -367,7 +464,7 @@
     <div id="rightColumn"
          ondragover="allowDrop(event)"
          ondrop="handleDrop(event, 'right')">
-      <h1>Negotiation Analysis</h1>
+         <h1 style="text-align: center;">Negotiation Analysis</h1>
       <div id="radarContainer">
         <canvas id="radarChart"></canvas>
         <!-- Optimize Draft Button -->
@@ -503,7 +600,7 @@
               stepSize: 1,
               font: {
                 size: 8, // smaller font size for the tick labels
-                family: 'Roboto'
+                family: 'Publico'
               },
               color: '#000000',
               callback: function(value) {
@@ -514,7 +611,7 @@
             pointLabels: {
               font: {
                 size: 12,
-                family: 'Roboto',
+                family: 'Publico',
                 style: 'bold'
               },
               color: '#000000'
